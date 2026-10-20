@@ -15,7 +15,7 @@ const internalHeaders = process.env.INTERNAL_TOKEN ? { "X-Internal-Token": proce
 
 const app = express();
 // Lock CORS to the deployed frontend when FRONTEND_ORIGIN is set (comma-separated); open in local dev.
-const origins = (process.env.FRONTEND_ORIGIN || "").split(",").map((o) => o.trim()).filter(Boolean);
+const origins = (process.env.FRONTEND_ORIGIN || "").split(",").map((o) => o.trim().replace(/\/+$/, "")).filter(Boolean); // browsers send no trailing slash
 app.use(cors(origins.length ? { origin: origins } : undefined));
 app.set("trust proxy", 1); // behind Render/Railway's proxy, so rate limiting sees the real client IP
 
