@@ -128,6 +128,14 @@ export default function App() {
               )}
             </section>
 
+            {result.explanation && (
+              <section className="rounded-xl bg-white p-5 shadow-sm border border-slate-200">
+                <h2 className="font-semibold mb-2">Why</h2>
+                <p className="leading-relaxed">{result.explanation}</p>
+                <p className="mt-2 text-xs text-slate-400">Analysis by Claude + rule engine</p>
+              </section>
+            )}
+
             <section className="rounded-xl bg-white p-5 shadow-sm border border-slate-200">
               <h2 className="font-semibold mb-2">Transcript</h2>
               <p className="whitespace-pre-wrap leading-relaxed">

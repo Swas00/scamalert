@@ -1,16 +1,17 @@
 import os
 
-import requests
 from dotenv import load_dotenv
+
+load_dotenv()  # must run before local imports that read env vars
+
+import requests
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel
 
-from classifier import classify_transcript
+from classifier import classify_full
 from language import detect_language
 from warning_texts import warning_text
-
-load_dotenv()
 
 GNANI_TTS_URL = "https://api.vachana.ai/api/v1/tts/inference"
 TTS_MODEL = os.getenv("TTS_MODEL", "timbre-v2.5")
@@ -36,7 +37,7 @@ def health():
 
 @app.post("/classify")
 def classify(body: ClassifyIn):
-    return {**classify_transcript(body.transcript), "language": detect_language(body.transcript)}
+    return {**classify_full(body.transcript), "language": detect_language(body.transcript)}
 
 
 @app.post("/warn")

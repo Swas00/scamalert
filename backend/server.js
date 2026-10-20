@@ -59,6 +59,8 @@ app.post("/api/analyze", upload.single("audio"), async (req, res) => {
       category: cls.category,
       categoryLabel: cls.category_label,
       flaggedPhrases: cls.flagged_phrases,
+      explanation: cls.explanation,
+      reasoner: cls.reasoner,
       warningAudio,
     };
 

@@ -1,6 +1,7 @@
 import re
 from functools import lru_cache
 
+import reasoner
 from rules import CATEGORIES, COMBOS, DAMPENERS, SIGNALS
 
 SIGNAL_CAP = 40  # keep generic signals from dominating on their own
@@ -56,3 +57,35 @@ def classify_transcript(transcript: str) -> dict:
         "flagged_phrases": flagged,
         "signals": sorted(present),
     }
+
+
+RULES_WEIGHT = 0.4  # final score = 40% rules + 60% Claude when both are available
+
+
+def classify_full(transcript: str) -> dict:
+    """Rules first, then Claude's judgement blended in. Falls back to rules alone if Claude is unavailable."""
+    result = classify_transcript(transcript)
+    result["reasoner"] = "rules"
+    result["explanation"] = None
+
+    verdict = reasoner.analyze(transcript)
+    if verdict is None:
+        return result
+
+    lowered = transcript.lower()
+    verified = [p for p in verdict.flagged_phrases if p.strip() and p.lower() in lowered]  # must be verbatim
+    flagged = list(result["flagged_phrases"])
+    flagged += [p for p in verified if p.lower() not in (f.lower() for f in flagged)]
+
+    result["risk_score"] = round(RULES_WEIGHT * result["risk_score"] + (1 - RULES_WEIGHT) * verdict.risk_score)
+    if verdict.category in CATEGORIES:
+        result["category"] = verdict.category
+        result["category_label"] = CATEGORIES[verdict.category]["label"]
+    elif verdict.category == "other_scam":
+        result["category"], result["category_label"] = "other_scam", "Other scam"
+    elif verdict.category == "none" and verdict.risk_score < 30:
+        result["category"] = result["category_label"] = None
+    result["flagged_phrases"] = flagged
+    result["explanation"] = verdict.explanation
+    result["reasoner"] = "claude+rules"
+    return result
