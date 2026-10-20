@@ -11,6 +11,7 @@ import { Analysis } from "./models.js";
 const PORT = process.env.PORT || 4000;
 const CLASSIFIER_URL = process.env.CLASSIFIER_URL || "http://127.0.0.1:8000";
 const STT_URL = "https://api.vachana.ai/stt/v3";
+const internalHeaders = process.env.INTERNAL_TOKEN ? { "X-Internal-Token": process.env.INTERNAL_TOKEN } : {};
 
 const app = express();
 // Lock CORS to the deployed frontend when FRONTEND_ORIGIN is set (comma-separated); open in local dev.
@@ -54,7 +55,7 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
     const transcript = stt.data.transcript || "";
 
     // 2. Classify
-    const { data: cls } = await axios.post(`${CLASSIFIER_URL}/classify`, { transcript });
+    const { data: cls } = await axios.post(`${CLASSIFIER_URL}/classify`, { transcript }, { headers: internalHeaders });
 
     // 3. Spoken warning (only when risk is meaningful)
     let warningAudio = null;
@@ -62,7 +63,7 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
       const tts = await axios.post(
         `${CLASSIFIER_URL}/warn`,
         { category: cls.category, transcript },
-        { responseType: "arraybuffer", timeout: 45000 }
+        { responseType: "arraybuffer", timeout: 45000, headers: internalHeaders }
       );
       warningAudio = `data:audio/wav;base64,${Buffer.from(tts.data).toString("base64")}`;
     }

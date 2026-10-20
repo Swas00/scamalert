@@ -1,11 +1,12 @@
 import os
+import secrets
 
 from dotenv import load_dotenv
 
 load_dotenv()  # must run before local imports that read env vars
 
 import requests
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel
 
@@ -16,6 +17,13 @@ from warning_texts import warning_text
 GNANI_TTS_URL = "https://api.vachana.ai/api/v1/tts/inference"
 TTS_MODEL = os.getenv("TTS_MODEL", "timbre-v2.5")
 TTS_VOICE = os.getenv("TTS_VOICE", "Nalini")
+
+def require_token(x_internal_token: str | None = Header(default=None)):
+    """When INTERNAL_TOKEN is set, only callers that send it (our backend) may use the API."""
+    expected = os.getenv("INTERNAL_TOKEN")
+    if expected and not secrets.compare_digest(x_internal_token or "", expected):
+        raise HTTPException(401, "Unauthorized")
+
 
 app = FastAPI(title="ScamAlert Classifier")
 
@@ -35,12 +43,12 @@ def health():
     return {"status": "ok"}
 
 
-@app.post("/classify")
+@app.post("/classify", dependencies=[Depends(require_token)])
 def classify(body: ClassifyIn):
     return {**classify_full(body.transcript), "language": detect_language(body.transcript)}
 
 
-@app.post("/warn")
+@app.post("/warn", dependencies=[Depends(require_token)])
 def warn(body: WarnIn):
     api_key = os.getenv("GNANI_API_KEY")
     if not api_key:
