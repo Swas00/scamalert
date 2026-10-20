@@ -8,3 +8,4 @@ venv/
 dist/
 uploads/
 .claude/settings.local.json
+samples/audio/

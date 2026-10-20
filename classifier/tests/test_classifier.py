@@ -36,3 +36,28 @@ def test_language_detection(s):
 def test_warning_language_fallback():
     assert warning_text("lottery_scam", "hi-IN")[1] == "hi-IN"
     assert warning_text("lottery_scam", "ta-IN")[1] == "en-IN"  # no Tamil translation yet
+
+
+def test_normalizes_spaced_acronyms_and_punctuation():
+    r = classify_transcript("आपका के वाई सी एक्सपायर हो गया है, अभी के अभी के वाई सी अपडेट करना पड़ेगा। वो ओ टी पी बताओ!")
+    assert r["category"] == "fake_kyc_update" and r["risk_score"] >= SCAM_THRESHOLD, r
+
+
+def test_weak_match_reports_no_category():
+    assert classify_transcript("I want a refund for my order")["category"] is None
+
+
+# Regression on real Prisma STT output for the synthetic audio bank (samples/transcripts.json).
+_ROOT = Path(__file__).resolve().parents[2] / "samples"
+_BANK = {s["id"]: s for s in json.loads((_ROOT / "scripts.json").read_text())}
+_STT = json.loads((_ROOT / "transcripts.json").read_text()) if (_ROOT / "transcripts.json").exists() else {}
+
+
+@pytest.mark.parametrize("key", sorted(_STT))
+def test_prisma_transcripts(key):
+    s = _BANK[key.split("/", 1)[1]]
+    r = classify_transcript(_STT[key])
+    if s["label"] == "scam":
+        assert r["risk_score"] >= SCAM_THRESHOLD and r["category"] == s["category"], r
+    else:
+        assert r["risk_score"] < SAFE_THRESHOLD, r

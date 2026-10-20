@@ -1,0 +1,28 @@
+[
+  {"id": "scam_kyc_en", "label": "scam", "category": "fake_kyc_update", "lang": "en-IN", "segments": [
+    {"voice": "Kaveri", "text": "Hello sir, I am calling from your bank's head office. Your KYC has expired and your account will be blocked today. You must update your KYC immediately. Please tell me the OTP you just received on your phone."},
+    {"voice": "Deepak", "text": "Oh, my account will be blocked? What should I do?"},
+    {"voice": "Kaveri", "text": "Just share the OTP right now sir, it is urgent, otherwise your account will be suspended within twenty four hours."}]},
+  {"id": "scam_kyc_hinglish", "label": "scam", "category": "fake_kyc_update", "lang": "hi-IN", "segments": [
+    {"voice": "Poorvi", "text": "Hello sir, main bank se bol rahi hoon. Aapka KYC expire ho gaya hai, abhi ke abhi KYC update karna padega warna account band ho jayega. Aapke phone par ek OTP aaya hai, woh OTP batao."}]},
+  {"id": "scam_upi_hi", "label": "scam", "category": "upi_refund_fraud", "lang": "hi-IN", "segments": [
+    {"voice": "Deepak", "text": "नमस्ते, आपके खाते में गलती से पैसे आ गए हैं। हम आपको रिफंड करना चाहते हैं। आपको एक रिक्वेस्ट एक्सेप्ट करनी है और अपना यूपीआई पिन बताओ, तुरंत।"}]},
+  {"id": "scam_lottery_hinglish", "label": "scam", "category": "lottery_scam", "lang": "hi-IN", "segments": [
+    {"voice": "Poorvi", "text": "Badhai ho! Aapne KBC lucky draw jeeta hai, pachaas lakh rupaye ka inaam. Inaam paane ke liye aapko registration fee turant bhejni hogi. Yeh baat kisi ko mat batana."}]},
+  {"id": "scam_bank_hi", "label": "scam", "category": "fake_bank_officer", "lang": "hi-IN", "segments": [
+    {"voice": "Deepak", "text": "मैं बैंक से बोल रहा हूँ। आपका डेबिट कार्ड ब्लॉक हो जाएगा। अपना कार्ड नंबर और ओटीपी बताओ तुरंत, नहीं तो खाता बंद हो जाएगा।"}]},
+  {"id": "scam_relative_hinglish", "label": "scam", "category": "relative_impersonation", "lang": "hi-IN", "segments": [
+    {"voice": "Deepak", "text": "Pehchana? Main bol raha hoon. Mera naya number hai. Main musibat mein hoon, accident ho gaya hai. Abhi paise bhejo, aur kisi ko mat batana."}]},
+  {"id": "scam_relative_en", "label": "scam", "category": "relative_impersonation", "lang": "en-IN", "segments": [
+    {"voice": "Deepak", "text": "Hello, it's me, your nephew. This is my new number. I am in trouble, there was an accident and I am in the hospital. Please send money urgently and don't tell anyone."}]},
+  {"id": "scam_bank_en", "label": "scam", "category": "fake_bank_officer", "lang": "en-IN", "segments": [
+    {"voice": "Kaveri", "text": "I am the bank manager. Your debit card is blocked. To reactivate it, tell me the card number and the CVV, and share the OTP right now."}]},
+  {"id": "safe_otp_notice_en", "label": "safe", "category": null, "lang": "en-IN", "segments": [
+    {"voice": "Kaveri", "text": "Your one time password for the transaction is four eight two nine one three. Do not share it with anyone, including bank staff."}]},
+  {"id": "safe_friend_hinglish", "label": "safe", "category": null, "lang": "hi-IN", "segments": [
+    {"voice": "Poorvi", "text": "Haan bhai, kal shaam ko milte hain. Mummy ko hospital se laana hai, phir hum khana khane chalenge. Theek hai?"}]},
+  {"id": "safe_refund_en", "label": "safe", "category": null, "lang": "en-IN", "segments": [
+    {"voice": "Kaveri", "text": "Hi, I would like a refund for my order, it arrived damaged. Could you please email me the return label?"}]},
+  {"id": "safe_family_hi", "label": "safe", "category": null, "lang": "hi-IN", "segments": [
+    {"voice": "Nalini", "text": "नमस्ते, कल शाम को मिलते हैं। हम सब साथ में खाना खाने चलेंगे।"}]}
+]

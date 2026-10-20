@@ -4,6 +4,7 @@ from functools import lru_cache
 import reasoner
 from rules import CATEGORIES, COMBOS, DAMPENERS, SIGNALS
 
+LOW_RISK = 30   # below this no scam category is reported
 SIGNAL_CAP = 40  # keep generic signals from dominating on their own
 
 
@@ -15,8 +16,22 @@ def _pattern(phrase: str) -> re.Pattern:
     return re.compile(re.escape(phrase))
 
 
+# Prisma spells Hindi acronyms letter by letter ("के वाई सी"); join them so rules match.
+_SPACED_ACRONYMS = [
+    (r"के\s*वाई\s*सी", "केवाईसी"), (r"ओ\s*टी\s*पी", "ओटीपी"), (r"यू\s*पी\s*आई|यु\s*पी\s*आई", "यूपीआई"),
+    (r"सी\s*वी\s*वी", "सीवीवी"), (r"ए\s*टी\s*एम", "एटीएम"), (r"\bk\s*y\s*c\b", "kyc"),
+    (r"\bo\s*t\s*p\b", "otp"), (r"\bu\s*p\s*i\b", "upi"), (r"\bc\s*v\s*v\b", "cvv"),
+]
+_PUNCT = re.compile(r"[,.;:!?\"“”‘()\[\]।|-]+")
+
+
 def _normalize(text: str) -> str:
-    return re.sub(r"\s+", " ", text.lower().replace("’", "'")).strip()
+    text = text.lower().replace("’", "'")
+    text = _PUNCT.sub(" ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    for pattern, repl in _SPACED_ACRONYMS:
+        text = re.sub(pattern, repl, text)
+    return text
 
 
 def _matches(text: str, phrases: list[tuple[str, int]]) -> list[tuple[str, int]]:
@@ -50,6 +65,8 @@ def classify_transcript(transcript: str) -> dict:
         if p not in flagged:
             flagged.append(p)
 
+    if total < LOW_RISK:
+        best_key = None  # too weak to name a scam type
     return {
         "risk_score": min(total, 100),
         "category": best_key,
