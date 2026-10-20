@@ -5,6 +5,7 @@ import multer from "multer";
 import axios from "axios";
 import FormData from "form-data";
 import mongoose from "mongoose";
+import rateLimit from "express-rate-limit";
 import { Analysis } from "./models.js";
 
 const PORT = process.env.PORT || 4000;
@@ -12,14 +13,27 @@ const CLASSIFIER_URL = process.env.CLASSIFIER_URL || "http://127.0.0.1:8000";
 const STT_URL = "https://api.vachana.ai/stt/v3";
 
 const app = express();
-app.use(cors());
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 25 * 1024 * 1024 } });
+// Lock CORS to the deployed frontend when FRONTEND_ORIGIN is set (comma-separated); open in local dev.
+const origins = (process.env.FRONTEND_ORIGIN || "").split(",").map((o) => o.trim()).filter(Boolean);
+app.use(cors(origins.length ? { origin: origins } : undefined));
+app.set("trust proxy", 1); // behind Render/Railway's proxy, so rate limiting sees the real client IP
+
+// Each analysis spends Gnani credits, so cap requests per IP on the public deployment.
+const analyzeLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  limit: Number(process.env.RATE_LIMIT_PER_HOUR || 20),
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many analyses from this address. Please try again later." },
+});
+// STT accepts <= 60 s of audio, which fits well within 8 MB
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 8 * 1024 * 1024 } });
 
 app.get("/api/health", (_req, res) =>
   res.json({ status: "ok", mongo: mongoose.connection.readyState === 1 })
 );
 
-app.post("/api/analyze", upload.single("audio"), async (req, res) => {
+app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "audio file is required (field: audio)" });
   if (!process.env.GNANI_API_KEY) return res.status(500).json({ error: "GNANI_API_KEY is not set" });
 
@@ -78,6 +92,12 @@ app.post("/api/analyze", upload.single("audio"), async (req, res) => {
     console.error("analyze failed:", status, detail);
     res.status(status >= 400 && status < 600 ? status : 502).json({ error: "Analysis failed", detail });
   }
+});
+
+app.use((err, _req, res, _next) => {
+  if (err.code === "LIMIT_FILE_SIZE") return res.status(413).json({ error: "Audio file too large (max 8 MB, 60 seconds)." });
+  console.error(err);
+  res.status(500).json({ error: "Server error" });
 });
 
 mongoose

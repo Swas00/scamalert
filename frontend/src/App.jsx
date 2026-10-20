@@ -5,6 +5,9 @@ const LANGS = [["en-IN", "English"], ["hi-IN", "Hindi"], ["ta-IN", "Tamil"], ["t
   ["kn-IN", "Kannada"], ["ml-IN", "Malayalam"], ["mr-IN", "Marathi"], ["bn-IN", "Bengali"],
   ["gu-IN", "Gujarati"], ["pa-IN", "Punjabi"]];
 
+// Empty in local dev (Vite proxies /api); set VITE_API_URL to the deployed backend in production.
+const API = import.meta.env.VITE_API_URL || "";
+
 const SAMPLES = [
   { file: "kyc-hindi-harsh.wav", label: "Fake KYC (Hindi, very noisy)", lang: "hi-IN" },
   { file: "upi-hindi-noisy.wav", label: "UPI refund (Hindi, noisy)", lang: "hi-IN" },
@@ -81,7 +84,7 @@ export default function App() {
     form.append("audio", file);
     form.append("language_code", lang);
     try {
-      const res = await fetch("/api/analyze", { method: "POST", body: form });
+      const res = await fetch(`${API}/api/analyze`, { method: "POST", body: form });
       const data = await res.json();
       if (!res.ok) throw new Error([data.error, typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)].filter(Boolean).join(": ") || "Request failed");
       setResult(data);

@@ -45,3 +45,11 @@ Start MongoDB with `brew services start mongodb-community` (or `mongod`).
 cd classifier && pip install -r requirements-dev.txt && python -m pytest
 ```
 Sample scam/safe transcripts (English, Hinglish, Hindi) live in `classifier/tests/samples.json`.
+
+## Deployment (Vercel + Render + MongoDB Atlas)
+1. **MongoDB Atlas:** create a free M0 cluster, a database user, and allow access from anywhere (Render IPs change). Copy the connection string as `MONGODB_URI`.
+2. **Render:** New -> Blueprint, point at this repo (`render.yaml` defines `scamalert-classifier` and `scamalert-backend`). Enter the secrets Render asks for: `GNANI_API_KEY` on both, `MONGODB_URI`, `CLASSIFIER_URL` (the classifier's public URL), and later `FRONTEND_ORIGIN`.
+3. **Vercel:** import the repo with root directory `frontend`, and set `VITE_API_URL` to the backend's Render URL. Then put the Vercel URL into the backend's `FRONTEND_ORIGIN` on Render and redeploy it.
+4. Check `https://<backend>/api/health`, then try a sample call on the site.
+
+Notes: Render's free tier sleeps after inactivity (first request can take about a minute), so open the site before recording a demo. `/api/analyze` is rate limited per IP (`RATE_LIMIT_PER_HOUR`, default 20) because every analysis spends Gnani credits. The Claude layer stays off unless `ANTHROPIC_API_KEY` is set on the classifier service.
