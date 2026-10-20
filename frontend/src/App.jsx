@@ -1,82 +1,30 @@
-import { useRef, useState } from "react";
-import { toWav } from "./wav.js";
-
-const LANGS = [["en-IN", "English"], ["hi-IN", "Hindi"], ["ta-IN", "Tamil"], ["te-IN", "Telugu"],
-  ["kn-IN", "Kannada"], ["ml-IN", "Malayalam"], ["mr-IN", "Marathi"], ["bn-IN", "Bengali"],
-  ["gu-IN", "Gujarati"], ["pa-IN", "Punjabi"]];
+import { useEffect, useRef, useState } from "react";
+import Header from "./components/Header.jsx";
+import InputPanel from "./components/InputPanel.jsx";
+import Report from "./components/Report.jsx";
+import EmptyReport from "./components/EmptyReport.jsx";
+import Skeleton from "./components/Skeleton.jsx";
+import { useElapsed } from "./lib/hooks.js";
 
 // Empty in local dev (Vite proxies /api); set VITE_API_URL to the deployed backend in production.
 const API = import.meta.env.VITE_API_URL || "";
 
-const SAMPLES = [
-  { file: "kyc-hindi-harsh.wav", label: "Fake KYC (Hindi, very noisy)", lang: "hi-IN" },
-  { file: "upi-hindi-noisy.wav", label: "UPI refund (Hindi, noisy)", lang: "hi-IN" },
-  { file: "bank-english-harsh.wav", label: "Fake bank officer (English, very noisy)", lang: "en-IN" },
-  { file: "safe-otp-notice.wav", label: "Genuine OTP notice (safe)", lang: "en-IN" },
-];
-
-function riskStyle(score) {
-  if (score >= 70) return { label: "High risk", cls: "bg-red-50 text-red-700 border-red-200" };
-  if (score >= 30) return { label: "Suspicious", cls: "bg-amber-50 text-amber-700 border-amber-200" };
-  return { label: "Looks safe", cls: "bg-green-50 text-green-700 border-green-200" };
-}
-
-function Highlighted({ text, phrases }) {
-  if (!phrases?.length) return <>{text}</>;
-  const esc = phrases.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  const parts = text.split(new RegExp(`(${esc.join("|")})`, "gi"));
-  return parts.map((part, i) =>
-    phrases.some((p) => p.toLowerCase() === part.toLowerCase())
-      ? <mark key={i} className="bg-red-100 text-red-800 rounded px-0.5">{part}</mark>
-      : part
-  );
-}
-
 export default function App() {
   const [file, setFile] = useState(null);
+  const [sample, setSample] = useState(null);
   const [lang, setLang] = useState("en-IN");
-  const [recording, setRecording] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
-  const recorder = useRef(null);
-  const chunks = useRef([]);
+  const waited = useElapsed(loading);
+  const reportRef = useRef(null);
 
-  async function toggleRecord() {
-    if (recording) { recorder.current.stop(); return; }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const rec = new MediaRecorder(stream);
-      chunks.current = [];
-      rec.ondataavailable = (e) => chunks.current.push(e.data);
-      rec.onstop = async () => {
-        stream.getTracks().forEach((t) => t.stop());
-        setRecording(false);
-        try {
-          setFile(await toWav(new Blob(chunks.current, { type: rec.mimeType })));
-        } catch {
-          setError("Could not process the recording.");
-        }
-      };
-      rec.start();
-      recorder.current = rec;
-      setRecording(true);
-    } catch {
-      setError("Microphone access denied.");
-    }
-  }
-
-  async function loadSample(sample) {
-    setError(""); setResult(null);
-    try {
-      const res = await fetch(`/samples/${sample.file}`);
-      if (!res.ok) throw new Error();
-      setFile(new File([await res.blob()], sample.file, { type: "audio/wav" }));
-      setLang(sample.lang);
-    } catch {
-      setError("Could not load the sample call.");
-    }
-  }
+  // On narrow screens the report sits below the form; bring it into view when analysis starts or finishes.
+  useEffect(() => {
+    if (!(loading || result || error) || window.matchMedia("(min-width: 1024px)").matches) return;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    reportRef.current?.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
+  }, [loading, result, error]);
 
   async function analyze() {
     setLoading(true); setError(""); setResult(null);
@@ -85,107 +33,53 @@ export default function App() {
     form.append("language_code", lang);
     try {
       const res = await fetch(`${API}/api/analyze`, { method: "POST", body: form });
-      const data = await res.json();
-      if (!res.ok) throw new Error([data.error, typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail)].filter(Boolean).join(": ") || "Request failed");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(res.status === 429 ? data.error || "Too many analyses right now. Please try again in a while." : data.error || "The analysis failed. Please try again.");
       setResult(data);
     } catch (e) {
-      setError(e.message);
+      setError(e instanceof TypeError ? "Couldn’t reach the server. Check your connection and try again." : e.message);
     } finally {
       setLoading(false);
     }
   }
 
-  const risk = result && riskStyle(result.riskScore);
-  const flags = result && result.riskScore >= 30 ? result.flaggedPhrases : [];  // no flags on safe calls
-
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900">
-      <main className="mx-auto max-w-2xl px-4 py-10 space-y-6">
-        <header>
-          <h1 className="text-3xl font-bold">ScamAlert</h1>
-          <p className="text-slate-600">Upload or record a call. We transcribe it and check it for scam patterns.</p>
-        </header>
+    <div className="mx-auto max-w-[1120px] px-4 pb-16 pt-6 sm:px-8 sm:pt-8">
+      <Header />
 
-        <section className="rounded-xl bg-white p-5 shadow-sm border border-slate-200 space-y-4">
-          <div className="flex flex-wrap gap-3 items-center">
-            <label className="cursor-pointer rounded-lg bg-slate-900 px-4 py-2 text-white text-sm font-medium hover:bg-slate-700">
-              Upload audio
-              <input type="file" accept="audio/*" hidden onChange={(e) => setFile(e.target.files[0] || null)} />
-            </label>
-            <button onClick={toggleRecord}
-              className={`rounded-lg px-4 py-2 text-sm font-medium border ${recording ? "bg-red-600 text-white border-red-600" : "bg-white border-slate-300 hover:bg-slate-100"}`}>
-              {recording ? "Stop recording" : "Record"}
-            </button>
-            <select value={lang} onChange={(e) => setLang(e.target.value)}
-              className="rounded-lg border border-slate-300 px-3 py-2 text-sm">
-              {LANGS.map(([c, n]) => <option key={c} value={c}>{n}</option>)}
-            </select>
+      <div className="mt-10 grid gap-x-16 gap-y-12 lg:grid-cols-12 lg:mt-14">
+        <div className="lg:col-span-5">
+          <h1 className="display text-[clamp(2.25rem,5.2vw,3.25rem)]">Is this call<br />a scam?</h1>
+          <p className="mb-9 mt-4 max-w-[40ch] text-[1.0625rem] text-ink-2">Upload or record a suspicious call. ScamAlert transcribes it, marks what sounds like fraud, and speaks a warning.</p>
+          <div className="lg:sticky lg:top-8">
+            <InputPanel {...{ file, setFile, sample, setSample, lang, setLang, loading, setError }} onAnalyze={analyze} />
           </div>
-          <div>
-            <p className="text-xs text-slate-500 mb-1.5">Or try a synthetic sample call (generated with Gnani Timbre, not a real call):</p>
-            <div className="flex flex-wrap gap-2">
-              {SAMPLES.map((sm) => (
-                <button key={sm.file} onClick={() => loadSample(sm)}
-                  className="rounded-full border border-slate-300 px-3 py-1 text-xs hover:bg-slate-100">
-                  {sm.label}
-                </button>
-              ))}
+        </div>
+
+        <main ref={reportRef} className="scroll-mt-4 lg:col-span-7 lg:border-l lg:border-rule lg:pl-16" aria-busy={loading}>
+          {error && (
+            <div role="alert" className="reveal mb-8 border-l-2 border-danger pl-4 text-[0.9375rem]">
+              <p className="font-medium text-danger">Something went wrong</p>
+              <p className="mt-1 text-ink-2">{error}</p>
             </div>
-          </div>
-          {file && <p className="text-sm text-slate-600">Selected: {file.name}</p>}
-          <button onClick={analyze} disabled={!file || loading}
-            className="w-full rounded-lg bg-indigo-600 py-2.5 text-white font-medium disabled:opacity-40">
-            {loading ? "Analyzing…" : "Analyze call"}
-          </button>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-        </section>
-
-        {result && (
-          <>
-            <section className={`rounded-xl border p-5 ${risk.cls}`}>
-              <div className="flex items-baseline justify-between">
-                <div>
-                  <p className="text-sm uppercase tracking-wide opacity-70">Risk score</p>
-                  <p className="text-5xl font-bold">{result.riskScore}<span className="text-xl">/100</span></p>
-                </div>
-                <div className="text-right">
-                  <p className="font-semibold">{risk.label}</p>
-                  {result.categoryLabel && <p className="text-sm">{result.categoryLabel}</p>}
-                </div>
-              </div>
-              {flags.length > 0 && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {flags.map((p) => (
-                    <span key={p} className="rounded-full bg-white/70 px-3 py-1 text-xs font-medium">{p}</span>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            {result.explanation && (
-              <section className="rounded-xl bg-white p-5 shadow-sm border border-slate-200">
-                <h2 className="font-semibold mb-2">Why</h2>
-                <p className="leading-relaxed">{result.explanation}</p>
-                <p className="mt-2 text-xs text-slate-400">Analysis by Claude + rule engine</p>
-              </section>
-            )}
-
-            <section className="rounded-xl bg-white p-5 shadow-sm border border-slate-200">
-              <h2 className="font-semibold mb-2">Transcript</h2>
-              <p className="whitespace-pre-wrap leading-relaxed">
-                {result.transcript ? <Highlighted text={result.transcript} phrases={flags} /> : "No speech detected."}
+          )}
+          {loading && (
+            <div className="reveal mb-8" role="status">
+              <p className="display text-[1.375rem]">Analyzing the call…</p>
+              <p className="mt-1 max-w-[50ch] text-[0.9375rem] text-ink-2">
+                {waited >= 8
+                  ? "The free server is waking up after a quiet spell — the first analysis can take up to a minute."
+                  : "Transcribing, reading for scam patterns, preparing the warning."}
               </p>
-            </section>
+            </div>
+          )}
+          {loading ? <Skeleton /> : result ? <Report result={result} /> : !error && <EmptyReport />}
+        </main>
+      </div>
 
-            {result.warningAudio && (
-              <section className="rounded-xl bg-white p-5 shadow-sm border border-slate-200">
-                <h2 className="font-semibold mb-2">Spoken warning</h2>
-                <audio controls src={result.warningAudio} className="w-full" />
-              </section>
-            )}
-          </>
-        )}
-      </main>
+      <footer className="mt-20 border-t border-rule pt-5 text-[0.8125rem] text-muted">
+        Built on Gnani AI’s Prisma and Timbre. Sample calls are synthetic; no real calls or personal data are used.
+      </footer>
     </div>
   );
 }
