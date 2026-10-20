@@ -39,6 +39,7 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
   if (!process.env.GNANI_API_KEY) return res.status(500).json({ error: "GNANI_API_KEY is not set" });
 
   const languageCode = req.body.language_code || "en-IN";
+  let stage = "stt"; // which upstream call is running, for error reports
   try {
     // 1. Speech-to-text (Gnani Prisma)
     const form = new FormData();
@@ -55,11 +56,13 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
     const transcript = stt.data.transcript || "";
 
     // 2. Classify
+    stage = "classifier /classify";
     const { data: cls } = await axios.post(`${CLASSIFIER_URL}/classify`, { transcript }, { headers: internalHeaders });
 
     // 3. Spoken warning (only when risk is meaningful)
     let warningAudio = null;
     if (cls.risk_score >= 30) {
+      stage = "classifier /warn";
       const tts = await axios.post(
         `${CLASSIFIER_URL}/warn`,
         { category: cls.category, transcript },
@@ -87,11 +90,13 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
     res.json(result);
   } catch (err) {
     const status = err.response?.status || 502;
-    const detail = err.response?.data
+    const raw = err.response?.data
       ? Buffer.isBuffer(err.response.data) ? err.response.data.toString() : err.response.data
       : err.message;
-    console.error("analyze failed:", status, detail);
-    res.status(status >= 400 && status < 600 ? status : 502).json({ error: "Analysis failed", detail });
+    // Upstream error pages can be huge HTML; keep logs and responses short.
+    const detail = (typeof raw === "string" ? raw : JSON.stringify(raw)).replace(/\s+/g, " ").slice(0, 300);
+    console.error(`analyze failed at [${stage}] status=${status} code=${err.code || "-"}:`, detail);
+    res.status(status >= 400 && status < 600 ? status : 502).json({ error: "Analysis failed", stage, detail });
   }
 });
 
