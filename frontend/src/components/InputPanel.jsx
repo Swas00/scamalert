@@ -62,6 +62,10 @@ export default function InputPanel({ file, setFile, sample, setSample, lang, set
     <div className="space-y-8">
       <section aria-labelledby="step1">
         <p className="label mb-3" id="step1">01 — The call</p>
+        <p className="mb-4 border-l-2 border-ink pl-3 text-[0.8125rem] leading-snug text-ink-2" data-testid="data-notice">
+          <strong className="font-semibold text-ink">Synthetic or test audio only.</strong> Please don’t upload real phone calls or anyone’s
+          personal details — phone, bank account, Aadhaar or PAN numbers. Transcripts are not stored.
+        </p>
 
         {!file ? (
           <label className="dropzone p-6 sm:p-7" data-drag={drag}

@@ -21,8 +21,8 @@ export default function EmptyReport() {
       </section>
       <section className="reveal" style={{ "--i": 1 }}>
         <p className="label mb-4">What it watches for</p>
-        <ul className="flex flex-wrap gap-x-6 gap-y-2 font-display text-[1.125rem]">
-          {KINDS.map((k) => <li key={k} className="after:ml-6 after:text-rule after:content-['/'] last:after:content-none">{k}</li>)}
+        <ul className="flex flex-wrap gap-x-7 gap-y-3 font-display text-[1.125rem]">
+          {KINDS.map((k) => <li key={k} className="border-b border-rule pb-0.5">{k}</li>)}
         </ul>
       </section>
     </div>

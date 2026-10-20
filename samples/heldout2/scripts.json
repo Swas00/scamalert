@@ -1,0 +1,158 @@
+[
+ {
+  "id": "g_scam_bank_hinglish",
+  "label": "scam",
+  "category": "fake_bank_officer",
+  "lang": "hi-IN",
+  "segments": [
+   {
+    "voice": "Deepak",
+    "text": "Sir, main aapke bank ke security department se bol raha hoon. Aapke account mein ek galat entry ho gayi hai. Ise theek karne ke liye aapke mobile par jo code aaya hai woh mujhe bata dijiye."
+   }
+  ],
+  "reference": "सर मैं आपके बैंक के सिक्योरिटी डिपार्टमेंट से बोल रहा हूं आपके अकाउंट में एक गलत एंट्री हो गई है इसे ठीक करने के लिए आपके मोबाइल पर जो कोड आया है वह मुझे बता दीजिए"
+ },
+ {
+  "id": "g_scam_prize_en",
+  "label": "scam",
+  "category": "lottery_scam",
+  "lang": "en-IN",
+  "segments": [
+   {
+    "voice": "Kaveri",
+    "text": "Congratulations! You have been selected for a free smartphone in our festival giveaway. To confirm your delivery you must pay a small handling charge online right away."
+   }
+  ],
+  "reference": "congratulations you have been selected for a free smartphone in our festival giveaway to confirm your delivery you must pay a small handling charge online right away"
+ },
+ {
+  "id": "g_scam_upi_hi",
+  "label": "scam",
+  "category": "upi_refund_fraud",
+  "lang": "hi-IN",
+  "segments": [
+   {
+    "voice": "Nalini",
+    "text": "आपके खाते में गलती से रकम भेज दी गई है। कृपया उसे लौटाने के लिए मेरे भेजे हुए क्यूआर कोड को स्कैन कीजिए।"
+   }
+  ],
+  "reference": "आपके खाते में गलती से रकम भेज दी गई है कृपया उसे लौटाने के लिए मेरे भेजे हुए क्यूआर कोड को स्कैन कीजिए"
+ },
+ {
+  "id": "g_scam_kyc_en",
+  "label": "scam",
+  "category": "fake_kyc_update",
+  "lang": "en-IN",
+  "segments": [
+   {
+    "voice": "Kaveri",
+    "text": "This is a reminder that your account will be frozen tonight unless your identity documents are verified. Please click the link we texted you and upload a photo of your PAN card."
+   }
+  ],
+  "reference": "this is a reminder that your account will be frozen tonight unless your identity documents are verified please click the link we texted you and upload a photo of your pan card"
+ },
+ {
+  "id": "g_scam_relative_hinglish",
+  "label": "scam",
+  "category": "relative_impersonation",
+  "lang": "hi-IN",
+  "segments": [
+   {
+    "voice": "Deepak",
+    "text": "Hello mama, main Aman bol raha hoon, ek dost ke phone se. Mera accident ho gaya hai, hospital mein hoon. Ek account number bhej raha hoon, abhi paise daal do aur ghar mein kisi ko mat batana."
+   }
+  ],
+  "reference": "हेलो मामा मैं अमन बोल रहा हूं एक दोस्त के फोन से मेरा एक्सीडेंट हो गया है हॉस्पिटल में हूं एक अकाउंट नंबर भेज रहा हूं अभी पैसे डाल दो और घर में किसी को मत बताना"
+ },
+ {
+  "id": "g_scam_officer_hi",
+  "label": "scam",
+  "category": "any",
+  "lang": "hi-IN",
+  "segments": [
+   {
+    "voice": "Deepak",
+    "text": "मैं साइबर क्राइम विभाग से बोल रहा हूँ। आपके आधार नंबर से गैरकानूनी गतिविधि हुई है। गिरफ्तारी से बचने के लिए तुरंत अपने खाते की जानकारी बताइए।"
+   }
+  ],
+  "reference": "मैं साइबर क्राइम विभाग से बोल रहा हूं आपके आधार नंबर से गैरकानूनी गतिविधि हुई है गिरफ्तारी से बचने के लिए तुरंत अपने खाते की जानकारी बताइए"
+ },
+ {
+  "id": "g_safe_card_en",
+  "label": "safe",
+  "category": null,
+  "lang": "en-IN",
+  "segments": [
+   {
+    "voice": "Kaveri",
+    "text": "Hi, I'm calling from the branch to let you know your new debit card is ready for pickup. You can collect it any weekday with a photo ID. No hurry at all."
+   }
+  ],
+  "reference": "hi i'm calling from the branch to let you know your new debit card is ready for pickup you can collect it any weekday with a photo id no hurry at all"
+ },
+ {
+  "id": "g_safe_cousin_hinglish",
+  "label": "safe",
+  "category": null,
+  "lang": "hi-IN",
+  "segments": [
+   {
+    "voice": "Deepak",
+    "text": "Bhai, kal ka plan pakka hai na? Main shaam ko station pe mil jaunga, tu bas apna ticket dekh lena."
+   }
+  ],
+  "reference": "भाई कल का प्लान पक्का है ना मैं शाम को स्टेशन पे मिल जाऊंगा तू बस अपना टिकट देख लेना"
+ },
+ {
+  "id": "g_safe_bankaware_hi",
+  "label": "safe",
+  "category": null,
+  "lang": "hi-IN",
+  "segments": [
+   {
+    "voice": "Nalini",
+    "text": "प्रिय ग्राहक, आपका लेन-देन सफल रहा। कृपया ध्यान रखें कि बैंक कभी भी फोन पर आपसे गोपनीय जानकारी नहीं माँगता।"
+   }
+  ],
+  "reference": "प्रिय ग्राहक आपका लेन-देन सफल रहा कृपया ध्यान रखें कि बैंक कभी भी फोन पर आपसे गोपनीय जानकारी नहीं मांगता"
+ },
+ {
+  "id": "g_safe_clinic_en",
+  "label": "safe",
+  "category": null,
+  "lang": "en-IN",
+  "segments": [
+   {
+    "voice": "Kaveri",
+    "text": "Hello, this is the clinic. Your appointment is confirmed for tomorrow morning. Please bring your previous reports. Let us know if you need to reschedule."
+   }
+  ],
+  "reference": "hello this is the clinic your appointment is confirmed for tomorrow morning please bring your previous reports let us know if you need to reschedule"
+ },
+ {
+  "id": "g_safe_refundchat_hinglish",
+  "label": "safe",
+  "category": null,
+  "lang": "hi-IN",
+  "segments": [
+   {
+    "voice": "Poorvi",
+    "text": "Maine kal order return kiya tha, refund ka status check kar raha hoon. Lagta hai kuch din mein aa jayega, tab tak wait karte hain."
+   }
+  ],
+  "reference": "मैंने कल ऑर्डर रिटर्न किया था रिफंड का स्टेटस चेक कर रहा हूं लगता है कुछ दिन में आ जाएगा तब तक वेट करते हैं"
+ },
+ {
+  "id": "g_safe_landlord_en",
+  "label": "safe",
+  "category": null,
+  "lang": "en-IN",
+  "segments": [
+   {
+    "voice": "Deepak",
+    "text": "Hi, it's your landlord. The plumber will visit on Saturday to fix the tap. Could you keep the flat open in the morning?"
+   }
+  ],
+  "reference": "hi it's your landlord the plumber will visit on saturday to fix the tap could you keep the flat open in the morning"
+ }
+]

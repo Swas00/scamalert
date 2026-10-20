@@ -1,0 +1,38 @@
+[
+  {"id": "h_scam_bank_en", "label": "scam", "category": "fake_bank_officer", "lang": "en-IN", "segments": [
+    {"voice": "Kaveri", "text": "Good afternoon. This is the fraud prevention team at your bank. We noticed a suspicious transaction on your account. To stop it, I need you to read out the six digit code we just sent to your mobile phone."}],
+   "reference": "good afternoon this is the fraud prevention team at your bank we noticed a suspicious transaction on your account to stop it i need you to read out the six digit code we just sent to your mobile phone"},
+  {"id": "h_scam_upi_hinglish", "label": "scam", "category": "upi_refund_fraud", "lang": "hi-IN", "segments": [
+    {"voice": "Poorvi", "text": "Namaste, aapne online ek order cancel kiya tha, uska paisa wapas karna hai. Aap bas apne phone par jo payment request aayi hai use approve kar dijiye aur PIN daal dijiye."}],
+   "reference": "नमस्ते आपने ऑनलाइन एक ऑर्डर कैंसल किया था उसका पैसा वापस करना है आप बस अपने फोन पर जो पेमेंट रिक्वेस्ट आई है उसे अप्रूव कर दीजिए और पिन डाल दीजिए"},
+  {"id": "h_scam_lottery_hi", "label": "scam", "category": "lottery_scam", "lang": "hi-IN", "segments": [
+    {"voice": "Nalini", "text": "बधाई हो! आपका मोबाइल नंबर इस महीने के भाग्यशाली विजेताओं में चुना गया है। आपने बहुत बड़ा इनाम जीता है। इसे पाने के लिए पहले टैक्स की रकम जमा करनी होगी।"}],
+   "reference": "बधाई हो आपका मोबाइल नंबर इस महीने के भाग्यशाली विजेताओं में चुना गया है आपने बहुत बड़ा इनाम जीता है इसे पाने के लिए पहले टैक्स की रकम जमा करनी होगी"},
+  {"id": "h_scam_relative_en", "label": "scam", "category": "relative_impersonation", "lang": "en-IN", "segments": [
+    {"voice": "Deepak", "text": "Hi uncle, it's Rohan. My phone fell in the water so I'm using a friend's number. I'm stuck at the station and my wallet is gone. Can you transfer some money to this account quickly? Please don't mention it to mummy."}],
+   "reference": "hi uncle it's rohan my phone fell in the water so i'm using a friend's number i'm stuck at the station and my wallet is gone can you transfer some money to this account quickly please don't mention it to mummy"},
+  {"id": "h_scam_kyc_hinglish", "label": "scam", "category": "fake_kyc_update", "lang": "hi-IN", "segments": [
+    {"voice": "Poorvi", "text": "Sir, aapka bank account verification pending hai. Aadhaar aur PAN link nahi hone ki wajah se account kal se band kar diya jayega. Main ek link bhej raha hoon, usme apni details daal dijiye."}],
+   "reference": "सर आपका बैंक अकाउंट वेरिफिकेशन पेंडिंग है आधार और पैन लिंक नहीं होने की वजह से अकाउंट कल से बंद कर दिया जाएगा मैं एक लिंक भेज रहा हूं उसमें अपनी डिटेल्स डाल दीजिए"},
+  {"id": "h_scam_bank_hi", "label": "scam", "category": "fake_bank_officer", "lang": "hi-IN", "segments": [
+    {"voice": "Deepak", "text": "मैं आपके बैंक का अधिकारी बोल रहा हूँ। आपके कार्ड से संदिग्ध लेन-देन हुआ है। अपनी सुरक्षा के लिए कार्ड के पीछे लिखा तीन अंकों का कोड बताइए।"}],
+   "reference": "मैं आपके बैंक का अधिकारी बोल रहा हूं आपके कार्ड से संदिग्ध लेन-देन हुआ है अपनी सुरक्षा के लिए कार्ड के पीछे लिखा तीन अंकों का कोड बताइए"},
+  {"id": "h_safe_courier_en", "label": "safe", "category": null, "lang": "en-IN", "segments": [
+    {"voice": "Deepak", "text": "Hello, this is the courier. I'm outside your building with your parcel. Could you come down or tell me which gate to use?"}],
+   "reference": "hello this is the courier i'm outside your building with your parcel could you come down or tell me which gate to use"},
+  {"id": "h_safe_branch_hinglish", "label": "safe", "category": null, "lang": "hi-IN", "segments": [
+    {"voice": "Poorvi", "text": "Sir, main aapki branch se bol raha hoon. Aapka naya chequebook aa gaya hai, kisi din aakar le jaiye. Koi jaldi nahi hai."}],
+   "reference": "सर मैं आपकी ब्रांच से बोल रहा हूं आपका नया चेकबुक आ गया है किसी दिन आकर ले जाइए कोई जल्दी नहीं है"},
+  {"id": "h_safe_hospital_hi", "label": "safe", "category": null, "lang": "hi-IN", "segments": [
+    {"voice": "Nalini", "text": "माँ का फोन आया था, वो अस्पताल में डॉक्टर से मिलकर आई हैं। सब ठीक है, चिंता की कोई बात नहीं। शाम को घर आकर बात करते हैं।"}],
+   "reference": "माँ का फोन आया था वो अस्पताल में डॉक्टर से मिलकर आई हैं सब ठीक है चिंता की कोई बात नहीं शाम को घर आकर बात करते हैं"},
+  {"id": "h_safe_refund_en", "label": "safe", "category": null, "lang": "en-IN", "segments": [
+    {"voice": "Kaveri", "text": "I returned the shoes last week and the refund hasn't shown up yet. Could you check the status of my return for me?"}],
+   "reference": "i returned the shoes last week and the refund hasn't shown up yet could you check the status of my return for me"},
+  {"id": "h_safe_otpaware_en", "label": "safe", "category": null, "lang": "en-IN", "segments": [
+    {"voice": "Kaveri", "text": "Dear customer, your one time password is in the message we just sent. Never disclose it to anyone. The bank will never call you to ask for it."}],
+   "reference": "dear customer your one time password is in the message we just sent never disclose it to anyone the bank will never call you to ask for it"},
+  {"id": "h_safe_kycchat_hinglish", "label": "safe", "category": null, "lang": "hi-IN", "segments": [
+    {"voice": "Poorvi", "text": "Yaar mera KYC update ho gaya, branch jakar karwaya tha. Tu bhi kal kar lena, bas Aadhaar card le jaana."}],
+   "reference": "यार मेरा केवाईसी अपडेट हो गया ब्रांच जाकर करवाया था तू भी कल कर लेना बस आधार कार्ड ले जाना"}
+]

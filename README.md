@@ -53,3 +53,9 @@ Sample scam/safe transcripts (English, Hinglish, Hindi) live in `classifier/test
 4. Check `https://<backend>/api/health`, then try a sample call on the site.
 
 Notes: Render's free tier sleeps after inactivity (first request can take about a minute), so open the site before recording a demo. `/api/analyze` is rate limited per IP (`RATE_LIMIT_PER_HOUR`, default 20) because every analysis spends Gnani credits. The Claude layer stays off unless `ANTHROPIC_API_KEY` is set on the classifier service.
+
+## Measured accuracy
+Held-out scam/safe tests, Prisma transcription error (English, Hindi, Hinglish; clean, noisy and harsh audio) and honest caveats are in [samples/RESULTS.md](samples/RESULTS.md). Reproduce with `classifier/venv/bin/python samples/measure.py heldout2`.
+
+## Data handling
+Use synthetic or test audio only: no real calls, phone/account/Aadhaar/PAN numbers. The backend stores only usage statistics (language, score, category), never transcripts or the phrases quoted from them.

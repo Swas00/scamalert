@@ -185,3 +185,12 @@ mark.hit {
 .seek::-moz-range-progress { height: 2px; background: var(--ink); }
 .seek::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; margin-top: -5px; border-radius: 50%; background: var(--ink); border: 0; }
 .seek::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); border: 0; }
+
+/* ---------- Touch devices: comfortable targets, and 16px form text so iOS Safari doesn't zoom on focus ---------- */
+@media (pointer: coarse) {
+  .chip { min-height: 44px; padding-block: 0.6rem; }
+  .btn { min-height: 44px; }
+  select { font-size: 1rem; min-height: 48px; }
+  .link-quiet { display: inline-block; padding-block: 0.65rem; }
+  header a { min-height: 44px; display: inline-flex; align-items: center; }
+}

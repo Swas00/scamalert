@@ -1,6 +1,6 @@
 """Generate the synthetic call-audio bank with Gnani Timbre, then make phone-quality noisy variants.
 
-Run from the repo root with the classifier venv:  classifier/venv/bin/python samples/build_audio.py
+Run from the repo root with the classifier venv:  classifier/venv/bin/python samples/build_audio.py [bank|heldout]
 Only synthetic scripts are used (samples/scripts.json) - never real calls or personal data.
 Existing clean clips are reused, so re-runs don't spend Gnani credits again.
 """
@@ -21,7 +21,10 @@ load_dotenv(ROOT.parent / "classifier" / ".env")
 KEY = os.environ["GNANI_API_KEY"]
 TTS_URL = "https://api.vachana.ai/api/v1/tts/inference"
 SR = 16000
-CLEAN, NOISY, HARSH = ROOT / "audio" / "clean", ROOT / "audio" / "noisy", ROOT / "audio" / "harsh"
+SET = sys.argv[1] if len(sys.argv) > 1 else "bank"  # "bank" = samples/scripts.json, otherwise samples/<SET>/scripts.json
+SCRIPTS = ROOT / "scripts.json" if SET == "bank" else ROOT / SET / "scripts.json"
+AUDIO = ROOT / "audio" if SET == "bank" else ROOT / "audio" / SET
+CLEAN, NOISY, HARSH = AUDIO / "clean", AUDIO / "noisy", AUDIO / "harsh"
 rng = np.random.default_rng(7)
 
 
@@ -67,7 +70,7 @@ def phone_noise(x, snr_db=12, babble=False, dropouts=0):
 def main():
     for d in (CLEAN, NOISY, HARSH):
         d.mkdir(parents=True, exist_ok=True)
-    scripts = json.loads((ROOT / "scripts.json").read_text())
+    scripts = json.loads(SCRIPTS.read_text())
     gap = np.zeros(int(0.5 * SR), dtype=np.float32)
     for s in scripts:
         clean = CLEAN / f"{s['id']}.wav"

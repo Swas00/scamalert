@@ -102,10 +102,17 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
       warningAudio,
     };
 
-    // 4. Persist (don't fail the request if Mongo is down)
+    // 4. Persist usage statistics only (don't fail the request if Mongo is down). The transcript and the phrases
+    // quoted from it are deliberately NOT stored: uploads are untrusted and may contain personal data.
     if (mongoose.connection.readyState === 1) {
-      Analysis.create({ ...result, warningAudio: undefined, languageCode, sttRequestId: stt.data.request_id })
-        .catch((e) => console.error("Mongo save failed:", e.message));
+      Analysis.create({
+        languageCode,
+        riskScore: result.riskScore,
+        category: result.category,
+        categoryLabel: result.categoryLabel,
+        reasoner: result.reasoner,
+        sttRequestId: stt.data.request_id,
+      }).catch((e) => console.error("Mongo save failed:", e.message));
     }
     res.json(result);
   } catch (err) {
