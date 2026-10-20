@@ -47,7 +47,7 @@ app.post("/api/analyze", upload.single("audio"), async (req, res) => {
     if (cls.risk_score >= 30) {
       const tts = await axios.post(
         `${CLASSIFIER_URL}/warn`,
-        { category: cls.category, language: "en-IN" },
+        { category: cls.category, transcript },
         { responseType: "arraybuffer", timeout: 45000 }
       );
       warningAudio = `data:audio/wav;base64,${Buffer.from(tts.data).toString("base64")}`;

@@ -7,6 +7,7 @@ from fastapi.responses import Response
 from pydantic import BaseModel
 
 from classifier import classify_transcript
+from language import detect_language
 from warning_texts import warning_text
 
 load_dotenv()
@@ -24,7 +25,8 @@ class ClassifyIn(BaseModel):
 
 class WarnIn(BaseModel):
     category: str | None = None
-    language: str = "en-IN"
+    transcript: str | None = None  # language is detected from this when given
+    language: str = "en-IN"  # fallback / explicit hint
 
 
 @app.get("/health")
@@ -34,7 +36,7 @@ def health():
 
 @app.post("/classify")
 def classify(body: ClassifyIn):
-    return classify_transcript(body.transcript)
+    return {**classify_transcript(body.transcript), "language": detect_language(body.transcript)}
 
 
 @app.post("/warn")
@@ -42,12 +44,13 @@ def warn(body: WarnIn):
     api_key = os.getenv("GNANI_API_KEY")
     if not api_key:
         raise HTTPException(500, "GNANI_API_KEY is not set")
-    text = warning_text(body.category)
+    language = detect_language(body.transcript) if body.transcript else body.language
+    text, language = warning_text(body.category, language)
     resp = requests.post(
         GNANI_TTS_URL,
         headers={"X-API-Key-ID": api_key, "Content-Type": "application/json"},
         json={
-            "text": text, "model": TTS_MODEL, "voice": TTS_VOICE, "language": body.language,
+            "text": text, "model": TTS_MODEL, "voice": TTS_VOICE, "language": language,
             "speed": 1.0,
             "audio_config": {"sample_rate": 24000, "num_channels": 1, "sample_width": 2,
                              "encoding": "linear_pcm", "container": "wav"},
@@ -57,4 +60,4 @@ def warn(body: WarnIn):
     if resp.status_code != 200:
         raise HTTPException(resp.status_code, f"Gnani TTS error: {resp.text[:300]}")
     return Response(content=resp.content, media_type="audio/wav",
-                    headers={"X-Warning-Text": text})
+                    headers={"X-Warning-Language": language})

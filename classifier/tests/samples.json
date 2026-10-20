@@ -1,0 +1,28 @@
+{
+  "scam": [
+    {"lang": "en", "category": "fake_kyc_update", "text": "Sir your KYC has expired. Update your KYC immediately or your account will be blocked. Share the OTP sent to your phone."},
+    {"lang": "en", "category": "upi_refund_fraud", "text": "We sent a wrong transfer to your account. To get the refund, accept the request on PhonePe and enter your UPI PIN right now."},
+    {"lang": "en", "category": "lottery_scam", "text": "Congratulations, you have won the lucky draw prize money of ten lakh rupees. Pay the processing fee to claim your prize."},
+    {"lang": "en", "category": "fake_bank_officer", "text": "I am the bank manager calling from bank. Your debit card is blocked, tell me the card number and the OTP urgently."},
+    {"lang": "en", "category": "relative_impersonation", "text": "Hello, it's me, your nephew, I have a new number. I am in trouble, accident happened, send money urgently and don't tell anyone."},
+    {"lang": "hinglish", "category": "fake_kyc_update", "text": "Sir aapka KYC expire ho gaya hai, abhi ke abhi KYC update karna padega warna account band ho jayega. OTP batao."},
+    {"lang": "hinglish", "category": "upi_refund_fraud", "text": "Aapke paise galti se transfer ho gaye, refund milega. QR code scan karo aur UPI pin batao jaldi."},
+    {"lang": "hinglish", "category": "lottery_scam", "text": "Badhai ho, aapne jeeta hai KBC lottery ka inaam. Registration fee bhejiye turant."},
+    {"lang": "hinglish", "category": "fake_bank_officer", "text": "Main bank se bol raha hu, aapka card block ho jayega. Card number batao aur OTP share karo turant."},
+    {"lang": "hinglish", "category": "relative_impersonation", "text": "Pehchana? Main bol raha hu, mera naya number hai. Main musibat mein hu, paise bhejo kisi ko mat batana."},
+    {"lang": "hi", "category": "fake_kyc_update", "text": "आपका केवाईसी अपडेट करना है, तुरंत ओटीपी बताइए नहीं तो खाता बंद हो जाएगा।"},
+    {"lang": "hi", "category": "upi_refund_fraud", "text": "आपके पैसे गलती से पैसे ट्रांसफर हो गए हैं, रिफंड के लिए यूपीआई पिन बताओ अभी के अभी।"},
+    {"lang": "hi", "category": "lottery_scam", "text": "बधाई हो, आपने जीता है लकी ड्रॉ का इनाम। प्रोसेसिंग फीस जमा करें।"},
+    {"lang": "hi", "category": "fake_bank_officer", "text": "मैं बैंक से बोल रहा हूँ, आपका कार्ड ब्लॉक हो जाएगा। कार्ड नंबर और ओटीपी बताओ तुरंत।"},
+    {"lang": "hi", "category": "relative_impersonation", "text": "पहचाना? मेरा नया नंबर है। मैं मुसीबत में हूँ, पैसे भेजो और किसी को मत बताना।"}
+  ],
+  "safe": [
+    {"lang": "en", "text": "Hello my name is Swastik, how are you? This is just a test recording."},
+    {"lang": "en", "text": "I would like a refund for my order, it arrived damaged. Please email me the return label."},
+    {"lang": "en", "text": "Your OTP is 482913. Do not share it with anyone, including bank staff."},
+    {"lang": "hinglish", "text": "Haan bhai, kal shaam ko milte hain, mummy ko hospital se laana hai, theek hai?"},
+    {"lang": "hinglish", "text": "Mera bank account statement chahiye, kab tak mil jayega?"},
+    {"lang": "hi", "text": "नमस्ते, कल शाम को मिलते हैं, खाना खाने चलेंगे।"},
+    {"lang": "hi", "text": "आपका ओटीपी 4829 है। इसे किसी के साथ शेयर न करें।"}
+  ]
+}

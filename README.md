@@ -39,3 +39,9 @@ Start MongoDB with `brew services start mongodb-community` (or `mongod`).
 - STT accepts audio up to 60 s (WAV, MP3, OGG, FLAC, AAC, M4A). Browser recordings are WebM; if Gnani rejects them, upload WAV/MP3.
 - TTS model/voice are configurable via `TTS_MODEL` / `TTS_VOICE` in `classifier/.env` (defaults `timbre-v2.5` / `Nalini`).
 - Classification is rule-based (`classifier/rules.py`); the API key is only read from `.env`.
+
+## Tests
+```bash
+cd classifier && pip install -r requirements-dev.txt && python -m pytest
+```
+Sample scam/safe transcripts (English, Hinglish, Hindi) live in `classifier/tests/samples.json`.
