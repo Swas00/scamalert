@@ -30,9 +30,28 @@ const analyzeLimiter = rateLimit({
 // STT accepts <= 60 s of audio, which fits well within 8 MB
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 8 * 1024 * 1024 } });
 
-app.get("/api/health", (_req, res) =>
-  res.json({ status: "ok", mongo: mongoose.connection.readyState === 1 })
-);
+// Free hosting puts idle services to sleep. Opening the site pings this endpoint, which also wakes the classifier
+// in the background so it is warm by the time someone presses "Analyze".
+app.get("/api/health", (_req, res) => {
+  axios.get(`${CLASSIFIER_URL}/health`, { timeout: 90000 }).catch(() => {});
+  res.json({ status: "ok", mongo: mongoose.connection.readyState === 1 });
+});
+
+// A sleeping Render service answers with 502/503/504 (or drops the connection) while it boots; retry until it is up.
+const WAKING = new Set([502, 503, 504]);
+async function callClassifier(request, { attempts = 6, delayMs = Number(process.env.CLASSIFIER_RETRY_MS || 6000) } = {}) {
+  for (let i = 1; ; i++) {
+    try {
+      return await request();
+    } catch (err) {
+      const status = err.response?.status;
+      const transient = status ? WAKING.has(status) : ["ECONNRESET", "ECONNREFUSED", "ETIMEDOUT", "ECONNABORTED"].includes(err.code);
+      if (!transient || i >= attempts) throw err;
+      console.warn(`classifier not ready (status=${status || err.code}), retry ${i}/${attempts - 1}`);
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+}
 
 app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: "audio file is required (field: audio)" });
@@ -57,16 +76,17 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
 
     // 2. Classify
     stage = "classifier /classify";
-    const { data: cls } = await axios.post(`${CLASSIFIER_URL}/classify`, { transcript }, { headers: internalHeaders });
+    const { data: cls } = await callClassifier(() =>
+      axios.post(`${CLASSIFIER_URL}/classify`, { transcript }, { headers: internalHeaders, timeout: 70000 })
+    );
 
     // 3. Spoken warning (only when risk is meaningful)
     let warningAudio = null;
     if (cls.risk_score >= 30) {
       stage = "classifier /warn";
-      const tts = await axios.post(
-        `${CLASSIFIER_URL}/warn`,
-        { category: cls.category, transcript },
-        { responseType: "arraybuffer", timeout: 45000, headers: internalHeaders }
+      const tts = await callClassifier(() =>
+        axios.post(`${CLASSIFIER_URL}/warn`, { category: cls.category, transcript },
+          { responseType: "arraybuffer", timeout: 70000, headers: internalHeaders })
       );
       warningAudio = `data:audio/wav;base64,${Buffer.from(tts.data).toString("base64")}`;
     }

@@ -19,6 +19,9 @@ export default function App() {
   const waited = useElapsed(loading);
   const reportRef = useRef(null);
 
+  // Free hosting sleeps when idle: ping the backend on load so it (and the classifier behind it) is awake by the time the user analyzes.
+  useEffect(() => { fetch(`${API}/api/health`).catch(() => {}); }, []);
+
   // On narrow screens the report sits below the form; bring it into view when analysis starts or finishes.
   useEffect(() => {
     if (!(loading || result || error) || window.matchMedia("(min-width: 1024px)").matches) return;
