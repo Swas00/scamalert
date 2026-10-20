@@ -5,6 +5,13 @@ const LANGS = [["en-IN", "English"], ["hi-IN", "Hindi"], ["ta-IN", "Tamil"], ["t
   ["kn-IN", "Kannada"], ["ml-IN", "Malayalam"], ["mr-IN", "Marathi"], ["bn-IN", "Bengali"],
   ["gu-IN", "Gujarati"], ["pa-IN", "Punjabi"]];
 
+const SAMPLES = [
+  { file: "kyc-hindi-harsh.wav", label: "Fake KYC (Hindi, very noisy)", lang: "hi-IN" },
+  { file: "upi-hindi-noisy.wav", label: "UPI refund (Hindi, noisy)", lang: "hi-IN" },
+  { file: "bank-english-harsh.wav", label: "Fake bank officer (English, very noisy)", lang: "en-IN" },
+  { file: "safe-otp-notice.wav", label: "Genuine OTP notice (safe)", lang: "en-IN" },
+];
+
 function riskStyle(score) {
   if (score >= 70) return { label: "High risk", cls: "bg-red-50 text-red-700 border-red-200" };
   if (score >= 30) return { label: "Suspicious", cls: "bg-amber-50 text-amber-700 border-amber-200" };
@@ -56,6 +63,18 @@ export default function App() {
     }
   }
 
+  async function loadSample(sample) {
+    setError(""); setResult(null);
+    try {
+      const res = await fetch(`/samples/${sample.file}`);
+      if (!res.ok) throw new Error();
+      setFile(new File([await res.blob()], sample.file, { type: "audio/wav" }));
+      setLang(sample.lang);
+    } catch {
+      setError("Could not load the sample call.");
+    }
+  }
+
   async function analyze() {
     setLoading(true); setError(""); setResult(null);
     const form = new FormData();
@@ -74,6 +93,7 @@ export default function App() {
   }
 
   const risk = result && riskStyle(result.riskScore);
+  const flags = result && result.riskScore >= 30 ? result.flaggedPhrases : [];  // no flags on safe calls
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -98,6 +118,17 @@ export default function App() {
               {LANGS.map(([c, n]) => <option key={c} value={c}>{n}</option>)}
             </select>
           </div>
+          <div>
+            <p className="text-xs text-slate-500 mb-1.5">Or try a synthetic sample call (generated with Gnani Timbre, not a real call):</p>
+            <div className="flex flex-wrap gap-2">
+              {SAMPLES.map((sm) => (
+                <button key={sm.file} onClick={() => loadSample(sm)}
+                  className="rounded-full border border-slate-300 px-3 py-1 text-xs hover:bg-slate-100">
+                  {sm.label}
+                </button>
+              ))}
+            </div>
+          </div>
           {file && <p className="text-sm text-slate-600">Selected: {file.name}</p>}
           <button onClick={analyze} disabled={!file || loading}
             className="w-full rounded-lg bg-indigo-600 py-2.5 text-white font-medium disabled:opacity-40">
@@ -119,9 +150,9 @@ export default function App() {
                   {result.categoryLabel && <p className="text-sm">{result.categoryLabel}</p>}
                 </div>
               </div>
-              {result.flaggedPhrases?.length > 0 && (
+              {flags.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {result.flaggedPhrases.map((p) => (
+                  {flags.map((p) => (
                     <span key={p} className="rounded-full bg-white/70 px-3 py-1 text-xs font-medium">{p}</span>
                   ))}
                 </div>
@@ -139,7 +170,7 @@ export default function App() {
             <section className="rounded-xl bg-white p-5 shadow-sm border border-slate-200">
               <h2 className="font-semibold mb-2">Transcript</h2>
               <p className="whitespace-pre-wrap leading-relaxed">
-                {result.transcript ? <Highlighted text={result.transcript} phrases={result.flaggedPhrases} /> : "No speech detected."}
+                {result.transcript ? <Highlighted text={result.transcript} phrases={flags} /> : "No speech detected."}
               </p>
             </section>
 
