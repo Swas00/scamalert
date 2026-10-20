@@ -39,7 +39,7 @@ app.get("/api/health", (_req, res) => {
 
 // A sleeping Render service answers with 502/503/504 (or drops the connection) while it boots; retry until it is up.
 const WAKING = new Set([502, 503, 504]);
-async function callClassifier(request, { attempts = 6, delayMs = Number(process.env.CLASSIFIER_RETRY_MS || 6000) } = {}) {
+async function callClassifier(request, { attempts = 14, delayMs = Number(process.env.CLASSIFIER_RETRY_MS || 6000) } = {}) {
   for (let i = 1; ; i++) {
     try {
       return await request();
