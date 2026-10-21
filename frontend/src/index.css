@@ -55,7 +55,7 @@
   --color-signal: var(--signal);
   --font-display: "Fraunces", "Noto Serif Devanagari", Georgia, serif;
   --font-sans: "Public Sans", "Noto Sans Devanagari", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --font-mono: "IBM Plex Mono", "Noto Sans Devanagari", ui-monospace, Menlo, monospace;
 }
 
 /* ---------- Base ---------- */
@@ -191,6 +191,34 @@ mark.hit {
   .chip { min-height: 44px; padding-block: 0.6rem; }
   .btn { min-height: 44px; }
   select { font-size: 1rem; min-height: 48px; }
-  .link-quiet { display: inline-block; padding-block: 0.65rem; }
+  .link-quiet { display: inline-block; padding-block: 0.8rem; }
+  .lang-btn { min-height: 44px; }
+  .skip-link { padding-block: 0.85rem; }
   header a { min-height: 44px; display: inline-flex; align-items: center; }
+}
+
+/* ---------- Language toggle, skip link, playback head ---------- */
+.lang-btn { background: transparent; color: var(--ink); cursor: pointer; border: 0; transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease); }
+.lang-btn:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.lang-btn[aria-pressed="true"] { background: var(--ink); color: var(--on-ink); }
+.lang-btn:focus-visible { outline-offset: -3px; }
+
+.skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 50; background: var(--ink); color: var(--on-ink); padding: 0.6rem 0.9rem; border-radius: 3px; font-size: 0.875rem; text-decoration: none; transition: top var(--t-base) var(--ease); }
+.skip-link:focus { top: 1rem; }
+
+.playhead { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--signal); box-shadow: 0 0 0 5px color-mix(in srgb, var(--signal) 14%, transparent); pointer-events: none; }
+
+/* ---------- Hindi: Devanagari needs looser leading and no letter-spacing (it breaks conjuncts and matras) ---------- */
+html[lang="hi"] .label { letter-spacing: 0; text-transform: none; font-size: 0.875rem; font-family: var(--font-sans); }
+html[lang="hi"] .display { letter-spacing: 0; line-height: 1.25; }
+html[lang="hi"] h1.display { line-height: 1.2; }
+html[lang="hi"] body { line-height: 1.7; }
+
+/* ---------- Print: just the report, on white ---------- */
+@media print {
+  :root { --paper: #fff; --surface: #fff; }
+  .skip-link, header, .lg\:col-span-5, footer, button, audio, .seek { display: none !important; }
+  main { border: 0 !important; padding: 0 !important; grid-column: 1 / -1 !important; }
+  mark.hit { animation: none !important; background-size: 100% 100% !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
 }

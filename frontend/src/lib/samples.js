@@ -1,19 +1,16 @@
 export const SAMPLES = [
-  { file: "kyc-hindi-harsh.wav", label: "Fake KYC · Hindi · very noisy", lang: "hi-IN" },
-  { file: "upi-hindi-noisy.wav", label: "UPI refund · Hindi · noisy", lang: "hi-IN" },
-  { file: "bank-english-harsh.wav", label: "Fake bank officer · English · very noisy", lang: "en-IN" },
-  { file: "safe-otp-notice.wav", label: "Genuine OTP notice · safe", lang: "en-IN" },
+  { file: "kyc-hindi-harsh.wav", labelKey: "sample.kyc", lang: "hi-IN" },
+  { file: "upi-hindi-noisy.wav", labelKey: "sample.upi", lang: "hi-IN" },
+  { file: "bank-english-harsh.wav", labelKey: "sample.bank", lang: "en-IN" },
+  { file: "safe-otp-notice.wav", labelKey: "sample.safe", lang: "en-IN" },
 ];
 
-export const LANGS = [
-  ["en-IN", "English"], ["hi-IN", "Hindi"], ["ta-IN", "Tamil"], ["te-IN", "Telugu"], ["kn-IN", "Kannada"],
-  ["ml-IN", "Malayalam"], ["mr-IN", "Marathi"], ["bn-IN", "Bengali"], ["gu-IN", "Gujarati"], ["pa-IN", "Punjabi"],
-];
+export const LANG_CODES = ["en-IN", "hi-IN", "ta-IN", "te-IN", "kn-IN", "ml-IN", "mr-IN", "bn-IN", "gu-IN", "pa-IN"];
 
 export const MAX_SECONDS = 60; // Gnani Prisma REST limit
 
 export function levelOf(score) {
-  if (score >= 70) return { key: "high", word: "High risk", cls: "text-danger", mark: "var(--danger-mark)", bar: "var(--danger)" };
-  if (score >= 30) return { key: "mid", word: "Suspicious", cls: "text-warn", mark: "var(--warn-mark)", bar: "var(--warn)" };
-  return { key: "low", word: "Looks safe", cls: "text-safe", mark: "var(--safe-mark)", bar: "var(--safe)" };
+  if (score >= 70) return { key: "high", cls: "text-danger", mark: "var(--danger-mark)", bar: "var(--danger)" };
+  if (score >= 30) return { key: "mid", cls: "text-warn", mark: "var(--warn-mark)", bar: "var(--warn)" };
+  return { key: "low", cls: "text-safe", mark: "var(--safe-mark)", bar: "var(--safe)" };
 }

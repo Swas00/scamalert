@@ -1,6 +1,5 @@
 // Draws a 1200x630 result card (verdict, score, marked phrases) on a canvas, in the page's current theme.
 // No transcript text is drawn - only the verdict and the short flagged phrases - so a card is safe to post.
-import { levelOf } from "./samples.js";
 
 const W = 1200, H = 630, PAD = 64, SCALE = 2;
 const SERIF = '"Fraunces", "Noto Serif Devanagari", Georgia, serif';
@@ -20,6 +19,8 @@ async function loadFonts() {
     document.fonts.load(`400 24px Fraunces`, "phrase"),
     document.fonts.load(`500 22px "Public Sans"`, "Looks like"),
     document.fonts.load(`500 14px "IBM Plex Mono"`, "SAFE"),
+    document.fonts.load(`400 28px "Noto Sans Devanagari"`, "अआक"),
+    document.fonts.load(`600 72px "Noto Serif Devanagari"`, "अआक"),
   ].map((p) => p.catch(() => null)));
 }
 
@@ -30,19 +31,25 @@ function fit(ctx, text, maxW) {
   return t.trimEnd() + "…";
 }
 
+const DEVANAGARI = /[\u0900-\u097F]/;
+
 function spaced(ctx, text, x, y, px = 1.4) {
-  // letter-spaced mono label (canvas letterSpacing is not universal yet)
+  // Letter-spaced mono label. Devanagari must not be split letter by letter (it would break conjuncts and matras).
+  if (DEVANAGARI.test(text)) { ctx.fillText(text, x, y); return; }
   let cx = x;
   for (const ch of text) { ctx.fillText(ch, cx, y); cx += ctx.measureText(ch).width + px; }
 }
 
-export async function renderResultCard(result, { synthetic = false } = {}) {
+function spacedWidth(ctx, text, px = 1.4) {
+  return DEVANAGARI.test(text) ? ctx.measureText(text).width : [...text].reduce((w, ch) => w + ctx.measureText(ch).width + px, 0);
+}
+
+export async function renderResultCard(result, { synthetic = false, t: tr, category = null, levelKey } = {}) {
   await loadFonts();
   const t = tokens();
-  const level = levelOf(result.riskScore);
   const css = getComputedStyle(document.documentElement);
-  const color = { high: css.getPropertyValue("--danger"), mid: css.getPropertyValue("--warn"), low: css.getPropertyValue("--safe") }[level.key].trim();
-  const mark = { high: css.getPropertyValue("--danger-mark"), mid: css.getPropertyValue("--warn-mark"), low: css.getPropertyValue("--safe-mark") }[level.key].trim();
+  const color = { high: css.getPropertyValue("--danger"), mid: css.getPropertyValue("--warn"), low: css.getPropertyValue("--safe") }[levelKey].trim();
+  const mark = { high: css.getPropertyValue("--danger-mark"), mid: css.getPropertyValue("--warn-mark"), low: css.getPropertyValue("--safe-mark") }[levelKey].trim();
 
   const canvas = document.createElement("canvas");
   canvas.width = W * SCALE; canvas.height = H * SCALE;
@@ -64,11 +71,12 @@ export async function renderResultCard(result, { synthetic = false } = {}) {
   ctx.restore();
 
   // verdict + score
-  ctx.fillStyle = color; ctx.font = `600 84px ${SERIF}`; ctx.fillText(level.word, PAD, 218);
-  if (result.categoryLabel) {
-    ctx.fillStyle = t.ink2; ctx.font = `400 28px ${SANS}`; ctx.fillText("Looks like:", PAD, 272);
-    const lw = ctx.measureText("Looks like: ").width;
-    ctx.fillStyle = t.ink; ctx.font = `600 28px ${SANS}`; ctx.fillText(result.categoryLabel, PAD + lw, 272);
+  ctx.fillStyle = color; ctx.font = `600 84px ${SERIF}`; ctx.fillText(tr(`level.${levelKey}`), PAD, 218);
+  if (category) {
+    const lead = `${tr("looks.like")} `;
+    ctx.fillStyle = t.ink2; ctx.font = `400 28px ${SANS}`; ctx.fillText(lead, PAD, 272);
+    const lw = ctx.measureText(lead).width;
+    ctx.fillStyle = t.ink; ctx.font = `600 28px ${SANS}`; ctx.fillText(category, PAD + lw, 272);
   }
   ctx.textAlign = "right";
   ctx.fillStyle = t.muted; ctx.font = `400 34px ${SERIF}`; ctx.fillText("/100", W - PAD, 218);
@@ -83,17 +91,19 @@ export async function renderResultCard(result, { synthetic = false } = {}) {
   ctx.fillStyle = t.ink2;
   [30, 70].forEach((p) => ctx.fillRect(bx + bw * p / 100, by - 5, 1, 18));
   ctx.fillStyle = t.muted; ctx.font = `500 14px ${MONO}`;
-  spaced(ctx, "SAFE", bx, by + 34);
-  spaced(ctx, "SUSPICIOUS", bx + bw * 0.3, by + 34);
-  ctx.textAlign = "right"; spaced(ctx, "HIGH RISK", bx + bw - 108, by + 34); ctx.textAlign = "left";
+  const up = (k) => tr(k).toUpperCase();
+  spaced(ctx, up("meter.safe"), bx, by + 34);
+  spaced(ctx, up("meter.mid"), bx + bw * 0.3, by + 34);
+  const hi = up("meter.high");
+  spaced(ctx, hi, bx + bw - spacedWidth(ctx, hi), by + 34);
 
   // marked phrases
   ctx.fillStyle = t.muted; ctx.font = `500 14px ${MONO}`;
   const flags = result.riskScore >= 30 ? (result.flaggedPhrases || []).slice(0, 8) : [];
-  spaced(ctx, flags.length ? "SUSPICIOUS PHRASES" : "RESULT", PAD, 404);
+  spaced(ctx, flags.length ? tr("card.phrases") : tr("card.result"), PAD, 404);
   if (!flags.length) {
     ctx.fillStyle = t.ink2; ctx.font = `400 26px ${SANS}`;
-    ctx.fillText("No scam patterns known to ScamAlert were found in this call.", PAD, 450);
+    ctx.fillText(tr("card.none"), PAD, 450);
   } else {
     ctx.font = `400 26px ${SERIF}`;
     let x = PAD, y = 452; const gap = 14, rowH = 50, maxX = W - PAD;
@@ -111,9 +121,10 @@ export async function renderResultCard(result, { synthetic = false } = {}) {
   // footer
   ctx.fillStyle = t.rule; ctx.fillRect(PAD, 548, W - PAD * 2, 1);
   ctx.fillStyle = t.muted; ctx.font = `500 14px ${MONO}`;
-  spaced(ctx, synthetic ? "SYNTHETIC SAMPLE CALL · NOT A REAL CALL" : "ANALYSED WITH SCAMALERT", PAD, 584);
-  spaced(ctx, "BUILT ON GNANI AI · PRISMA + TIMBRE", PAD, 606);
-  ctx.textAlign = "right"; spaced(ctx, "SCAMALERT-TAU.VERCEL.APP", W - PAD - 215, 606); ctx.textAlign = "left";
+  spaced(ctx, synthetic ? tr("card.sample") : tr("card.analysed"), PAD, 584);
+  spaced(ctx, tr("card.built"), PAD, 606);
+  const site = "SCAMALERT-TAU.VERCEL.APP";
+  spaced(ctx, site, W - PAD - spacedWidth(ctx, site), 606);
 
   return new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 }

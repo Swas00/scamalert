@@ -5,11 +5,13 @@ import Report from "./components/Report.jsx";
 import EmptyReport from "./components/EmptyReport.jsx";
 import Skeleton from "./components/Skeleton.jsx";
 import { useElapsed } from "./lib/hooks.js";
+import { useI18n } from "./lib/i18n.jsx";
 
 // Empty in local dev (Vite proxies /api); set VITE_API_URL to the deployed backend in production.
 const API = import.meta.env.VITE_API_URL || "";
 
 export default function App() {
+  const { t } = useI18n();
   const [file, setFile] = useState(null);
   const [sample, setSample] = useState(null);
   const [lang, setLang] = useState("en-IN");
@@ -37,10 +39,10 @@ export default function App() {
     try {
       const res = await fetch(`${API}/api/analyze`, { method: "POST", body: form });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(res.status === 429 ? data.error || "Too many analyses right now. Please try again in a while." : data.error || "The analysis failed. Please try again.");
+      if (!res.ok) throw new Error(res.status === 429 ? "err.limit" : "err.generic");
       setResult({ ...data, synthetic: !!sample });
     } catch (e) {
-      setError(e instanceof TypeError ? "Couldn’t reach the server. Check your connection and try again." : e.message);
+      setError(e instanceof TypeError ? "err.net" : e.message);
     } finally {
       setLoading(false);
     }
@@ -48,31 +50,30 @@ export default function App() {
 
   return (
     <div className="mx-auto max-w-[1120px] px-4 pb-16 pt-6 sm:px-8 sm:pt-8">
+      <a href="#results" className="skip-link">{t("skip")}</a>
       <Header />
 
       <div className="mt-10 grid gap-x-16 gap-y-12 lg:grid-cols-12 lg:mt-14">
         <div className="lg:col-span-5">
-          <h1 className="display text-[clamp(2.25rem,5.2vw,3.25rem)]">Is this call<br />a scam?</h1>
-          <p className="mb-9 mt-4 max-w-[40ch] text-[1.0625rem] text-ink-2">Upload or record a suspicious call. ScamAlert transcribes it, marks what sounds like fraud, and speaks a warning.</p>
+          <h1 className="display text-[clamp(2.25rem,5.2vw,3.25rem)]">{t("h1.a")}<br />{t("h1.b")}</h1>
+          <p className="mb-9 mt-4 max-w-[40ch] text-[1.0625rem] text-ink-2">{t("intro")}</p>
           <div className="lg:sticky lg:top-8">
             <InputPanel {...{ file, setFile, sample, setSample, lang, setLang, loading, setError }} onAnalyze={analyze} />
           </div>
         </div>
 
-        <main ref={reportRef} className="scroll-mt-4 lg:col-span-7 lg:border-l lg:border-rule lg:pl-16" aria-busy={loading}>
+        <main id="results" tabIndex={-1} ref={reportRef} className="scroll-mt-4 lg:col-span-7 lg:border-l lg:border-rule lg:pl-16" aria-busy={loading}>
           {error && (
             <div role="alert" className="reveal mb-8 border-l-2 border-danger pl-4 text-[0.9375rem]">
-              <p className="font-medium text-danger">Something went wrong</p>
-              <p className="mt-1 text-ink-2">{error}</p>
+              <p className="font-medium text-danger">{t("err.title")}</p>
+              <p className="mt-1 text-ink-2">{t(error)}</p>
             </div>
           )}
           {loading && (
             <div className="reveal mb-8" role="status">
-              <p className="display text-[1.375rem]">Analyzing the call…</p>
+              <p className="display text-[1.375rem]">{t("loading.title")}</p>
               <p className="mt-1 max-w-[50ch] text-[0.9375rem] text-ink-2">
-                {waited >= 8
-                  ? "The free server is waking up after a quiet spell — the first analysis can take up to a minute."
-                  : "Transcribing, reading for scam patterns, preparing the warning."}
+                {waited >= 8 ? t("loading.wake") : t("loading.body")}
               </p>
             </div>
           )}
@@ -81,7 +82,7 @@ export default function App() {
       </div>
 
       <footer className="mt-20 border-t border-rule pt-5 text-[0.8125rem] text-muted">
-        Built on Gnani AI’s Prisma and Timbre. Sample calls are synthetic; no real calls or personal data are used.
+        {t("foot.page")}
       </footer>
     </div>
   );
