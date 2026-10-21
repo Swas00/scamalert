@@ -1,6 +1,6 @@
 """Honest accuracy report for a script set: Prisma transcription error rates and rules-only scam detection.
 
-Run from the repo root:  classifier/venv/bin/python samples/measure.py [bank|heldout] [--refresh]
+Run from the repo root:  classifier/venv/bin/python samples/measure.py [bank|heldout|heldout2] [--refresh] [--with-llm]
 Transcripts are cached (samples/transcripts.json or samples/<set>/transcripts.json) so re-runs spend no credits.
 
 Transcription: WER/CER against each script's `reference` text (when present), after removing punctuation and
@@ -21,15 +21,21 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).parent
 sys.path.insert(0, str(ROOT.parent / "classifier"))
 load_dotenv(ROOT.parent / "classifier" / ".env")
-os.environ.pop("ANTHROPIC_API_KEY", None)  # rules-only measurement
+WITH_LLM = "--with-llm" in sys.argv  # also score the Claude + rules blend (needs ANTHROPIC_API_KEY)
+if not WITH_LLM:
+    os.environ.pop("ANTHROPIC_API_KEY", None)  # rules-only measurement (default)
 
-from classifier import _normalize, classify_transcript  # noqa: E402
+import hashlib  # noqa: E402
+
+import reasoner  # noqa: E402
+from classifier import _normalize, classify_full, classify_transcript  # noqa: E402
 
 TRANSCRIBE_ONLY = "--transcribe-only" in sys.argv  # fetch/cache transcripts without scoring them (keeps a set unseen)
 SET = next((a for a in sys.argv[1:] if not a.startswith("--")), "bank")
 SCRIPTS = ROOT / "scripts.json" if SET == "bank" else ROOT / SET / "scripts.json"
 AUDIO = ROOT / "audio" if SET == "bank" else ROOT / "audio" / SET
 CACHE = ROOT / "transcripts.json" if SET == "bank" else ROOT / SET / "transcripts.json"
+LLM_CACHE = ROOT / "llm_cache.json" if SET == "bank" else ROOT / SET / "llm_cache.json"
 STT_URL = "https://api.vachana.ai/stt/v3"
 CONDS = ("clean", "noisy", "harsh")
 SCAM_MIN, SAFE_MAX = 60, 30
@@ -74,7 +80,30 @@ def script_of(s):
     return "English"
 
 
+def install_llm_cache():
+    """Cache Claude's verdict per transcript so re-runs are free and reproducible; the prompt is never tuned on these sets."""
+    if not os.getenv("ANTHROPIC_API_KEY"):
+        sys.exit("--with-llm needs ANTHROPIC_API_KEY (set it in classifier/.env)")
+    cache = json.loads(LLM_CACHE.read_text()) if LLM_CACHE.exists() else {}
+    real = reasoner.analyze
+
+    def cached(transcript):
+        key = f"{reasoner.MODEL}|{hashlib.sha256(transcript.encode()).hexdigest()[:16]}"
+        if key not in cache:
+            v = real(transcript)
+            if v is None:
+                return None  # failures are not cached
+            cache[key] = v.model_dump()
+            LLM_CACHE.write_text(json.dumps(cache, ensure_ascii=False, indent=1))
+        return reasoner.Verdict(**cache[key])
+
+    reasoner.analyze = cached
+
+
 def main():
+    if WITH_LLM:
+        install_llm_cache()
+    score = classify_full if WITH_LLM else classify_transcript
     scripts = json.loads(SCRIPTS.read_text())
     cache = {} if "--refresh" in sys.argv else (json.loads(CACHE.read_text()) if CACHE.exists() else {})
     rows, wer_acc = [], defaultdict(list)
@@ -87,7 +116,7 @@ def main():
             hyp = cache[key]
             if TRANSCRIBE_ONLY:
                 continue
-            r = classify_transcript(hyp)
+            r = score(hyp)
             flagged_scam = r["risk_score"] >= SCAM_MIN
             cat_ok = s["category"] in ("any", None) or r["category"] == s["category"]
             ok = (flagged_scam and cat_ok) if s["label"] == "scam" else r["risk_score"] < SAFE_MAX
@@ -107,7 +136,7 @@ def main():
         print(f"{x['id']:<26}{x['cond']:<7}{x['score']:>6}  {str(x['cat']):<24}{str(x['expected']):<24}"
               f"{'' if x['wer'] is None else format(x['wer'], '.0%'):>6}{'' if x['cer'] is None else format(x['cer'], '.0%'):>6}  {'ok' if x['ok'] else 'MISS' if x['label'] == 'scam' else 'FALSE ALARM'}")
 
-    print(f"\n=== {SET}: detection (rules only) ===")
+    print(f"\n=== {SET}: detection ({'Claude + rules' if WITH_LLM else 'rules only'}) ===")
     for cond in CONDS:
         sc = [x for x in rows if x["cond"] == cond and x["label"] == "scam"]
         sf = [x for x in rows if x["cond"] == cond and x["label"] == "safe"]
