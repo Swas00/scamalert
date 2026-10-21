@@ -38,7 +38,7 @@ export default function App() {
       const res = await fetch(`${API}/api/analyze`, { method: "POST", body: form });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(res.status === 429 ? data.error || "Too many analyses right now. Please try again in a while." : data.error || "The analysis failed. Please try again.");
-      setResult(data);
+      setResult({ ...data, synthetic: !!sample });
     } catch (e) {
       setError(e instanceof TypeError ? "Couldn’t reach the server. Check your connection and try again." : e.message);
     } finally {
@@ -76,7 +76,7 @@ export default function App() {
               </p>
             </div>
           )}
-          {loading ? <Skeleton /> : result ? <Report result={result} /> : !error && <EmptyReport />}
+          {loading ? <Skeleton /> : result ? <Report result={result} synthetic={result.synthetic} /> : !error && <EmptyReport />}
         </main>
       </div>
 

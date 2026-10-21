@@ -1,6 +1,8 @@
 import { segments } from "../lib/highlight.js";
 import { levelOf } from "../lib/samples.js";
+import { useState } from "react";
 import { useCountUp } from "../lib/hooks.js";
+import { saveResultCard } from "../lib/shareCard.js";
 import AudioPlayer from "./AudioPlayer.jsx";
 
 function Measure({ score, level }) {
@@ -18,12 +20,20 @@ function Measure({ score, level }) {
   );
 }
 
-export default function Report({ result }) {
+export default function Report({ result, synthetic = false }) {
+  const [saving, setSaving] = useState("idle"); // idle | busy | done | error
   const level = levelOf(result.riskScore);
   const shown = useCountUp(result.riskScore, true);
   const flags = result.riskScore >= 30 ? result.flaggedPhrases || [] : [];
   const parts = segments(result.transcript || "", flags);
   let hitIndex = 0;
+
+  async function save() {
+    setSaving("busy");
+    try { await saveResultCard(result, { synthetic }); setSaving("done"); }
+    catch { setSaving("error"); }
+    setTimeout(() => setSaving("idle"), 2500);
+  }
 
   return (
     <div aria-live="polite" className="space-y-10">
@@ -88,6 +98,15 @@ export default function Report({ result }) {
           </p>
         </section>
       )}
+
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-rule pt-6">
+        <button type="button" className="btn btn-ghost" onClick={save} disabled={saving === "busy"}>
+          {saving === "busy" ? "Preparing image…" : "Save result as image"}
+        </button>
+        <span className="text-[0.8125rem] text-muted" role="status">
+          {saving === "done" ? "Image ready." : saving === "error" ? "Couldn’t create the image. Please try again." : "A shareable card with the verdict and marked phrases — no transcript."}
+        </span>
+      </div>
 
       <p className="label border-t border-rule pt-4 normal-case tracking-normal">
         Transcribed by Gnani Prisma · analysed by {result.reasoner === "claude+rules" ? "Claude and a rule engine" : "a rule engine"} · results are an aid, not a guarantee.
