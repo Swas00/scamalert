@@ -1,6 +1,6 @@
 import { useI18n } from "../lib/i18n.jsx";
 
-const KINDS = ["kyc", "upi", "lottery", "bank", "relative"];
+const KINDS = ["kyc", "upi", "lottery", "bank", "relative", "authority"];
 
 export default function EmptyReport() {
   const { t } = useI18n();
