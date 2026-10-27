@@ -59,3 +59,13 @@ Held-out scam/safe tests, Prisma transcription error (English, Hindi, Hinglish; 
 
 ## Data handling
 Use synthetic or test audio only: no real calls, phone/account/Aadhaar/PAN numbers. The backend stores only usage statistics (language, score, category), never transcripts or the phrases quoted from them.
+
+## Language support
+| Language | Transcription (Prisma) | Scam detection | Spoken warning (Timbre) |
+|---|---|---|---|
+| English | yes | yes | yes |
+| Hindi / Hinglish | yes | yes | yes |
+| Kannada | yes | **beta** (weak on unseen wording, see `samples/RESULTS.md`) | yes |
+| Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi | yes | **no**: the transcript is shown without a verdict | no |
+
+The interface is available in English and Hindi. Hindi and Kannada text has not been reviewed by a native speaker.
