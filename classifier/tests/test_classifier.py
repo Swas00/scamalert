@@ -99,3 +99,32 @@ def test_secret_requests_are_flagged(text):
 ])
 def test_ordinary_mentions_are_not_flagged(text):
     assert classify_transcript(text)["risk_score"] < 30
+
+
+# Government / police impersonation ("digital arrest"). These examples are the author's own, so they are regression tests, not accuracy evidence.
+@pytest.mark.parametrize("text", [
+    "I am calling from the cyber crime department. A parcel in your name contains drugs. You are under digital arrest, do not disconnect the call and transfer the money to a safe account",
+    "मैं सीबीआई अधिकारी बोल रहा हूँ। आपके आधार नंबर से मनी लॉन्ड्रिंग हुई है। डिजिटल अरेस्ट से बचना है तो कॉल मत काटिए और सेफ अकाउंट में पैसे ट्रांसफर कीजिए",
+    "Main CBI se bol raha hoon, aapke naam par ek parcel pakda gaya hai. Giraftari se bachna hai to call mat kaatna aur jaanch mein sahyog kijiye",
+    "This is the police. There is an arrest warrant against you for money laundering. Stay on the line and do not tell anyone.",
+])
+def test_authority_impersonation_is_detected(text):
+    r = classify_transcript(text)
+    assert r["category"] == "fake_authority" and r["risk_score"] >= 60, r
+
+
+@pytest.mark.parametrize("text", [
+    "I went to the police station to renew my licence and the officer was very helpful",
+    "The customs department website has a duty calculator, I checked it for my order",
+    "The cyber crime department held a free awareness session at our college yesterday",
+    "पुलिस स्टेशन के पास नया बैंक खुला है, कल चलते हैं",
+])
+def test_plain_mentions_of_agencies_do_not_warn(text):
+    assert classify_transcript(text)["risk_score"] < 30
+
+
+def test_authority_has_spoken_warnings_in_english_and_hindi():
+    from warning_texts import warning_text
+    for lang in ("en-IN", "hi-IN"):
+        text, used = warning_text("fake_authority", lang)
+        assert used == lang and "digital arrest" in text.lower() or "डिजिटल अरेस्ट" in text
