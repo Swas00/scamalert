@@ -283,3 +283,24 @@ DAMPENER_PATTERNS += [
     (r"(?:ಒಟಿಪಿಯನ್ನು|ಪಿನ್ ಅನ್ನು|ಸಿವಿವಿಯನ್ನು|ಪಾಸ್ವರ್ಡ್ ಅನ್ನು|ಕಾರ್ಡ್ ನಂಬರ್ ಅನ್ನು).{0,15}(?:ಯಾರಿಗೂ|ಯಾರೊಂದಿಗೂ).{0,12}(?:ಹೇಳಬೇಡಿ|ಹಂಚಿಕೊಳ್ಳಬೇಡಿ)", 45),
     (r"ಎಂದಿಗೂ.{0,25}ಕೇಳುವುದಿಲ್ಲ", 25),
 ]
+
+# Kannada request shapes (second pass): asking for a number/code described without naming it, link-and-fill phishing,
+# "pay a fee to receive a prize", and the police/officer identity claim plus staying on the line.
+SIGNAL_PATTERNS["credential"] += [
+    (rf"(?:ಒಂದು|ಎರಡು|ಮೂರು|ನಾಲ್ಕು|ಐದು|ಆರು|\d+)\s*ಅಂಕಿಯ.{{0,25}}?{_KN_ASK}", 35),
+    (rf"(?:ಸಂಖ್ಯೆಯನ್ನು|ನಂಬರನ್ನು|ನಂಬರ್ ಅನ್ನು).{{0,15}}{_KN_ASK}", 25),
+]
+CATEGORY_PATTERNS["fake_kyc_update"] += [
+    (r"ಲಿಂಕ್.{0,25}(?:ತೆರೆ|ಕ್ಲಿಕ್|ಒತ್ತಿ)|(?:ವಿವರಗಳನ್ನು|ಮಾಹಿತಿಯನ್ನು).{0,12}(?:ತುಂಬಿ|ಹಾಕಿ|ನಮೂದಿಸಿ)", 25),
+    (r"ಲಿಂಕ್ ಆಗಿಲ್ಲ", 15),
+]
+CATEGORY_PATTERNS["lottery_scam"] += [
+    (r"(?:ಅದೃಷ್ಟ ವಿಜೇತ|ಬಹುಮಾನ|ಉಚಿತ).{0,40}(?:ಆಯ್ಕೆಯಾ|ಗೆದ್ದ|ಸಿಗುತ್ತದೆ)", 20),
+    (r"(?:ಕಳುಹಿಸಲು|ಪಡೆಯಲು).{0,25}ಹಣ.{0,25}(?:ಕಟ್ಟ|ಪಾವತಿ)", 25),
+]
+SIGNAL_PATTERNS["payment_request"].append((r"ಹಣ.{0,25}(?:ಕಟ್ಟ(?:ಬೇಕು|ಿ)|ಪಾವತಿಸ(?:ಬೇಕು|ಿ))", 25))
+CATEGORY_PATTERNS["fake_authority"] += [
+    (r"(?:ಠಾಣೆಯಿಂದ|ಕಚೇರಿಯಿಂದ|ಇಲಾಖೆಯಿಂದ).{0,8}ಮಾತನಾಡ", 25),
+    (r"ಮಾದಕ ವಸ್ತು|ಮಾದಕವಸ್ತು", 25),
+]
+SIGNAL_PATTERNS["secrecy"].append((r"(?:ವೀಡಿಯೊ )?ಕರೆಯಲ್ಲೇ ಇರಿ|ಕರೆಯಲ್ಲಿಯೇ ಇರಿ|ಲೈನ್‌ನಲ್ಲೇ ಇರಿ|ಲೈನ್ನಲ್ಲೇ ಇರಿ", 25))
