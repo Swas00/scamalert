@@ -71,7 +71,13 @@ export async function renderResultCard(result, { synthetic = false, t: tr, categ
   ctx.restore();
 
   // verdict + score
-  ctx.fillStyle = color; ctx.font = `600 84px ${SERIF}`; ctx.fillText(tr(`level.${levelKey}`), PAD, 218);
+  // The verdict word varies in length (and script); shrink it until it clears the score on the right.
+  const verdict = tr(`level.${levelKey}`);
+  const room = W - PAD * 2 - 430;
+  let vsize = 84;
+  ctx.font = `600 ${vsize}px ${SERIF}`;
+  while (vsize > 44 && ctx.measureText(verdict).width > room) { vsize -= 2; ctx.font = `600 ${vsize}px ${SERIF}`; }
+  ctx.fillStyle = color; ctx.fillText(verdict, PAD, 218);
   if (category) {
     const lead = `${tr("looks.like")} `;
     ctx.fillStyle = t.ink2; ctx.font = `400 28px ${SANS}`; ctx.fillText(lead, PAD, 272);
