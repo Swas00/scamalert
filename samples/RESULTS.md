@@ -38,3 +38,14 @@ v2 numbers were identical across clean, noisy and harsh audio. v2 was scored onc
   rules (an AI assistant), so v2 is still optimistic. Voices are TTS, not real telephone speech or real scammers.
 - The next real gains: the LLM reasoning layer (built, off pending Gnani's answer on third-party LLMs), and real,
   consented, scrubbed call samples. Neither is claimed here.
+
+## 4. Changes made after v2 was scored (2026-10-27)
+A "police / government impersonation" ("digital arrest") category was added, partly motivated by one v2 clip
+(`g_scam_officer_hi`) that had no matching category. The table in section 2 is the original, pre-change v2 score
+and is left as it was. For transparency, re-scoring after the change gives:
+
+- v2 (rules only): scams >= 60: 3/6 clean, **4/6 noisy**, 3/6 harsh; warns (>= 30): 6/6; false alarms: 0/6. The one clip that
+  moved is the impersonation call (now labelled `fake_authority`; 50 clean, 78 noisy, 50 harsh).
+- v1 and the in-sample set: unchanged.
+- v2 is therefore no longer fully held out for that clip. The new category is covered by the author's own regression tests
+  (`classifier/tests/test_classifier.py`), which are not accuracy evidence.
