@@ -21,11 +21,27 @@ function Measure({ score, level, t }) {
   );
 }
 
+function TranscriptOnly({ result, t }) {
+  return (
+    <div aria-live="polite" className="space-y-10">
+      <section className="reveal border-l-2 border-warn pl-4" style={{ "--i": 0 }} aria-label={t("unsupported.title")}>
+        <h2 className="display text-[1.5rem] text-warn">{t("unsupported.title")}</h2>
+        <p className="mt-2 max-w-[60ch] text-[0.9375rem] text-ink-2">{t("unsupported.body")}</p>
+      </section>
+      <section className="reveal" style={{ "--i": 1 }} aria-label={t("transcript")}>
+        <p className="label mb-3">{t("transcript")}</p>
+        <p className="transcript max-w-[62ch] border-l-2 border-rule pl-5">{result.transcript || t("transcript.none")}</p>
+      </section>
+    </div>
+  );
+}
+
 export default function Report({ result, synthetic = false }) {
   const { t, lang } = useI18n();
   const [saving, setSaving] = useState("idle"); // idle | busy | done | error
+  const shown = useCountUp(result.riskScore, true); // hooks first: the early return below must come after all of them
+  if (result.detection === "none") return <TranscriptOnly result={result} t={t} />;
   const level = levelOf(result.riskScore);
-  const shown = useCountUp(result.riskScore, true);
   const flags = result.riskScore >= 30 ? result.flaggedPhrases || [] : [];
   const parts = segments(result.transcript || "", flags);
   const category = result.category ? t(`cat.${result.category}`) : null;

@@ -6,6 +6,7 @@ import EmptyReport from "./components/EmptyReport.jsx";
 import Skeleton from "./components/Skeleton.jsx";
 import { useElapsed } from "./lib/hooks.js";
 import { useI18n } from "./lib/i18n.jsx";
+import { detectionFor } from "./lib/samples.js";
 
 // Empty in local dev (Vite proxies /api); set VITE_API_URL to the deployed backend in production.
 const API = import.meta.env.VITE_API_URL || "";
@@ -40,7 +41,7 @@ export default function App() {
       const res = await fetch(`${API}/api/analyze`, { method: "POST", body: form });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(res.status === 429 ? "err.limit" : "err.generic");
-      setResult({ ...data, synthetic: !!sample });
+      setResult({ ...data, synthetic: !!sample, detection: detectionFor(lang) });
     } catch (e) {
       setError(e instanceof TypeError ? "err.net" : e.message);
     } finally {
