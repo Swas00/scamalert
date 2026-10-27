@@ -75,7 +75,9 @@ def cer(ref, hyp):
 
 def script_of(s):
     ref = s.get("reference", "")
-    if re.search(r"[ऀ-ॿ]", ref):
+    if re.search("[\u0C80-\u0CFF]", ref):
+        return "Kannada"
+    if re.search("[\u0900-\u097F]", ref):
         return "Hindi/Hinglish"
     return "English"
 
