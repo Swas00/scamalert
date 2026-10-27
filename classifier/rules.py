@@ -263,7 +263,7 @@ _KN_SIGNAL_PHRASES = {
     "credential": [("ಒಟಿಪಿ", 25), ("ಸಿವಿವಿ", 30), ("ಯುಪಿಐ ಪಿನ್", 30), ("ಪಿನ್", 12)],
     "threat": [("ಬ್ಲಾಕ್ ಆಗ", 18), ("ಬಂಧನ", 20), ("ಕಾನೂನು ಕ್ರಮ", 20), ("ಖಾತೆ ಮುಚ್ಚ", 18)],
     "secrecy": [("ಯಾರಿಗೂ ಹೇಳಬೇಡಿ", 20), ("ಮನೆಯಲ್ಲಿ ಯಾರಿಗೂ", 20)],
-    "payment_request": [("ಹಣ ಕಳುಹಿಸಿ", 25), ("ಹಣ ಹಾಕಿ", 25), ("ಹಣ ವರ್ಗಾಯಿಸ", 25), ("ಶುಲ್ಕ ಪಾವತಿ", 20), ("ಹಣ ಪಾವತಿ", 20)],
+    "payment_request": [("ಹಣ ಕಳುಹಿಸಿ", 25), ("ಹಣ ಹಾಕಿ", 25), ("ಹಣ ವರ್ಗಾಯಿಸ", 25), ("ಶುಲ್ಕ ಪಾವತಿ", 20), ("ಹಣ ಪಾವತಿ", 20)],  # note: "ಹಣ ಮರುಪಾವತಿ" (refund) does not contain "ಹಣ ಪಾವತಿ"
 }
 for _group, _items in _KN_SIGNAL_PHRASES.items():
     SIGNALS[_group].extend(_items)
@@ -275,7 +275,7 @@ CATEGORY_PATTERNS["fake_authority"] += [
     (r"(?:ಇಲಾಖೆಯಿಂದ|ಅಧಿಕಾರಿ).{0,8}ಮಾತನಾಡ", 25),
 ]
 SIGNAL_PATTERNS["credential"].append((rf"{_KN_SECRET}.{{0,30}}?{_KN_ASK}", 35))
-SIGNAL_PATTERNS["payment_request"].append((r"ಹಣ.{0,12}(?:ಕಳುಹಿಸಿ|ಹಾಕಿ|ವರ್ಗಾಯಿಸ|ಪಾವತಿ|ಕೊಡಿ)", 25))
+SIGNAL_PATTERNS["payment_request"].append((r"ಹಣ.{0,12}(?:ಕಳುಹಿಸಿ|ಹಾಕಿ|ವರ್ಗಾಯಿಸ|(?<!ಮರು)ಪಾವತಿ|ಕೊಡಿ)", 25))  # not ಮರುಪಾವತಿ (a refund)
 SIGNAL_PATTERNS["secrecy"].append((r"ಕರೆ.{0,5}ಕಟ್ ಮಾಡ.{0,4}ಬೇಡ|ಫೋನ್ ಇಡಬೇಡಿ", 25))
 
 # Genuine safety advice: "do not share the OTP with anyone", "a bank never asks for it".
