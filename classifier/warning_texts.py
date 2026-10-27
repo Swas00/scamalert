@@ -6,6 +6,7 @@ WARNINGS = {
         "lottery_scam": "Warning. This looks like a lottery scam. You cannot win a prize you did not enter. Never pay a fee to claim a prize.",
         "fake_bank_officer": "Warning. This caller may be pretending to be a bank officer. Never share your OTP, CVV or card number with anyone.",
         "relative_impersonation": "Warning. This may be someone pretending to be your relative. Call your family member on a known number before sending any money.",
+        "fake_authority": "Warning. This looks like a scam by someone pretending to be police or a government officer. There is no such thing as a digital arrest. Hang up, and do not transfer any money.",
         "default": "Warning. This call shows signs of a scam. Do not share personal or financial details.",
     },
     "hi-IN": {
@@ -14,6 +15,7 @@ WARNINGS = {
         "lottery_scam": "सावधान! यह लॉटरी का घोटाला लगता है। आप ऐसा इनाम नहीं जीत सकते जिसमें आपने हिस्सा ही नहीं लिया। इनाम के लिए कभी कोई फीस न दें।",
         "fake_bank_officer": "सावधान! यह कॉलर खुद को बैंक अधिकारी बता रहा हो सकता है। अपना ओटीपी, सीवीवी या कार्ड नंबर किसी को न बताएं।",
         "relative_impersonation": "सावधान! यह कोई आपका रिश्तेदार बनकर बात कर रहा हो सकता है। पैसे भेजने से पहले अपने परिवार के सदस्य को उनके पुराने नंबर पर फोन करें।",
+        "fake_authority": "सावधान! यह पुलिस या सरकारी अधिकारी बनकर की जा रही ठगी लगती है। डिजिटल अरेस्ट जैसी कोई चीज़ नहीं होती। फोन काट दें और किसी को पैसे न भेजें।",
         "default": "सावधान! इस कॉल में धोखाधड़ी के संकेत हैं। अपनी निजी या वित्तीय जानकारी साझा न करें।",
     },
 }
