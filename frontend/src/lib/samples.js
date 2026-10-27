@@ -7,6 +7,10 @@ export const SAMPLES = [
 
 export const LANG_CODES = ["en-IN", "hi-IN", "ta-IN", "te-IN", "kn-IN", "ml-IN", "mr-IN", "bn-IN", "gu-IN", "pa-IN"];
 
+// How well scam detection works for the language the user says is spoken. "none" = no rules exist, so no verdict is shown.
+export const DETECTION = { "en-IN": "full", "hi-IN": "full", "kn-IN": "beta" };
+export const detectionFor = (code) => DETECTION[code] || "none";
+
 export const MAX_SECONDS = 60; // Gnani Prisma REST limit
 
 export function levelOf(score) {
