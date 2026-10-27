@@ -17,6 +17,8 @@ from warning_texts import warning_text
 GNANI_TTS_URL = "https://api.vachana.ai/api/v1/tts/inference"
 TTS_MODEL = os.getenv("TTS_MODEL", "timbre-v2.5")
 TTS_VOICE = os.getenv("TTS_VOICE", "Nalini")
+# Timbre v2.5 voices are tied to a language; use a native voice where Gnani lists one (Kannada), else the default.
+VOICES = {"kn-IN": os.getenv("TTS_VOICE_KN", "Saanvi")}
 
 def require_token(x_internal_token: str | None = Header(default=None)):
     """When INTERNAL_TOKEN is set, only callers that send it (our backend) may use the API."""
@@ -59,7 +61,7 @@ def warn(body: WarnIn):
         GNANI_TTS_URL,
         headers={"X-API-Key-ID": api_key, "Content-Type": "application/json"},
         json={
-            "text": text, "model": TTS_MODEL, "voice": TTS_VOICE, "language": language,
+            "text": text, "model": TTS_MODEL, "voice": VOICES.get(language, TTS_VOICE), "language": language,
             "speed": 1.0,
             "audio_config": {"sample_rate": 24000, "num_channels": 1, "sample_width": 2,
                              "encoding": "linear_pcm", "container": "wav"},
