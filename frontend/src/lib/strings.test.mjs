@@ -23,7 +23,7 @@ test("Hindi strings are not just copies of English (except brand/technical text)
 });
 
 test("every category the classifier can return has a label", () => {
-  for (const c of ["fake_kyc_update", "upi_refund_fraud", "lottery_scam", "fake_bank_officer", "relative_impersonation", "other_scam"]) {
+  for (const c of ["fake_kyc_update", "upi_refund_fraud", "lottery_scam", "fake_bank_officer", "relative_impersonation", "fake_authority", "other_scam"]) {
     assert.ok(STR.en[`cat.${c}`] && STR.hi[`cat.${c}`], `missing category label ${c}`);
   }
 });
