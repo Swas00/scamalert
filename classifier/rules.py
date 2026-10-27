@@ -63,6 +63,21 @@ CATEGORIES = {
             ("मुसीबत में", 30), ("दुर्घटना", 15), ("अस्पताल", 12), ("एक्सीडेंट", 15),
         ],
     },
+    "fake_authority": {
+        "label": "Government or police impersonation",
+        "phrases": [
+            ("digital arrest", 40), ("arrest warrant", 30), ("money laundering", 30), ("narcotics", 20),
+            ("under investigation", 20), ("under surveillance", 20), ("illegal parcel", 30),
+            ("stay on the line", 25), ("do not disconnect", 30), ("don't disconnect", 30), ("safe account", 40),
+            ("rbi account", 30), ("verification account", 25), ("telecom department", 20), ("supreme court", 12),
+            ("cbi se bol", 30), ("police se bol", 30), ("crime branch se bol", 30), ("customs se bol", 30),
+            ("call mat kaatna", 30), ("call mat kaatiye", 30), ("jaanch mein sahyog", 20), ("giraftari", 25),
+            ("डिजिटल अरेस्ट", 40), ("गिरफ्तारी वारंट", 30), ("गिरफ्तारी", 20), ("सीबीआई", 25),
+            ("नारकोटिक्स", 20), ("मनी लॉन्ड्रिंग", 30), ("जांच में सहयोग", 20),
+            ("कॉल मत काटिए", 30), ("कॉल न काटें", 30), ("कॉल मत काटना", 30), ("अवैध पार्सल", 30),
+            ("गैरकानूनी गतिविधि", 25), ("सेफ अकाउंट", 40),
+        ],
+    },
 }
 
 # Cross-category signals. Each group has its own phrases with weights.
@@ -87,6 +102,7 @@ SIGNALS = {
         ("ब्लॉक हो जाएगा", 18), ("कानूनी कार्रवाई", 20), ("जेल", 15),
     ],
     "secrecy": [
+        (r"(?:don'?t|do not|never|मत|न).{0,12}(?:disconnect|hang up|cut|काट).{0,15}(?:call|line|phone|कॉल|फोन)|(?:call|कॉल)\s*(?:mat|na|मत|न)\s*(?:kaat|kat|काट)", 25),
         ("don't tell anyone", 20), ("do not tell anyone", 20), ("keep this secret", 20),
         ("kisi ko mat batana", 25), ("kisi ko na batana", 25), ("kisi ko mat batao", 25),
         ("किसी को मत बताना", 25), ("किसी को न बताना", 25), ("किसी को मत बताओ", 25),
@@ -126,6 +142,13 @@ _ASK_ROM = r"(?:bata|batao|bataiye|bataye|bol|bolo|bhej|bhejo|bhejiye|share|de d
 _ASK_HI = r"(?:बताइए|बताओ|बताएं|बता दीजिए|बता दो|बोलिए|भेजिए|भेजो|डालिए|डाल दीजिए|डालो|दीजिए|बता दीजिये|बताइये)"
 
 CATEGORY_PATTERNS = {
+    "fake_authority": [
+        (r"(?:cbi|police|customs|narcotics|cyber ?crime|rbi|trai|income tax|साइबर क्राइम|पुलिस|सीबीआई|कस्टम).{0,25}(?:officer|inspector|department|branch|विभाग|अधिकारी|इंस्पेक्टर)", 8),
+        (r"(?:calling|speaking|this is|i am|i'm|you are speaking).{0,20}(?:from|with|at).{0,12}(?:the )?(?:cbi|police|customs|narcotics|cyber ?crime|rbi|income tax)", 25),
+        (r"(?:parcel|package|courier|पार्सल).{0,40}(?:drugs|illegal|passport|fake|seized|contraband|नशीले|अवैध|जब्त)", 30),
+        (r"(?:your|aapke|आपके).{0,25}(?:aadhaar|aadhar|sim|आधार).{0,25}(?:used|misused|illegal|case|गैरकानूनी|इस्तेमाल|मामले)", 25),
+        (r"(?:transfer|deposit|ट्रांसफर|जमा).{0,30}(?:verification|safe|rbi|सत्यापन|सुरक्षित).{0,15}(?:account|अकाउंट|खाते)", 35),
+    ],
     "fake_kyc_update": [
         (r"(?:verification|verify|identity).{0,25}(?:pending|required|failed|not complete|documents)", 20),
         (r"(?:account|खाता|अकाउंट).{0,30}(?:frozen|closed|blocked|suspended|band kar diya|बंद कर दिया|बंद कर दिया जाएगा)", 25),
