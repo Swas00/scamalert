@@ -49,3 +49,32 @@ and is left as it was. For transparency, re-scoring after the change gives:
 - v1 and the in-sample set: unchanged.
 - v2 is therefore no longer fully held out for that clip. The new category is covered by the author's own regression tests
   (`classifier/tests/test_classifier.py`), which are not accuracy evidence.
+
+## 5. Kannada (beta), 2026-10-27
+Kannada support = Prisma transcription (`kn-IN`) + Timbre spoken warnings (voice Saanvi) + a first set of Kannada rules.
+All audio is synthetic (Timbre voices Saanvi and Kavin), as above. Scripts were written by the author (an AI assistant); the
+spoken warnings were checked by a round trip (Timbre speech -> Prisma transcription) but **no native speaker has reviewed
+the Kannada text** (warnings or rules).
+
+**Transcription (Prisma), word error rate vs the script text**
+
+| Set | Clean | Noisy | Harsh | n |
+|---|---|---|---|---|
+| Kannada v2 | 6.1% | 6.9% | 17.2% | 10 |
+| Kannada v3 | 10.9% | 13.2% | 14.5% | 10 |
+
+**Scam detection (rules only)**
+
+| Set | What it is | Scams >= 60 | Scams that warn (>= 30) | False alarms |
+|---|---|---|---|---|
+| `kannada` (6 scam, 4 safe) | development set the rules were built from | 6/6 | 6/6 | 0/4 |
+| `kannada2` (5 + 5), BEFORE fixes | fresh wording, scored once | **1/5** | **2/5** | 1/5 |
+| `kannada2`, after fixes | contaminated: the fixes came from its misses | 5/5 | 5/5 | 0/5 |
+| **`kannada3` (5 + 5), scored once** | fresh wording, written after the fixes | **1/5** | **3/5** | **0/5** |
+
+Same pattern as Hindi: the rules fit the scripts they were built from and generalise poorly to new wording. Kannada scam
+detection is therefore **beta**: on unseen scripts it raised a warning for 3 of 5 scams and missed 2. No further tuning was
+done on `kannada3`. Because of this, the app tells the user so on Kannada results, and for languages with no rules at all
+(Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi) it shows the transcript without any verdict.
+
+The repo keeps these sets so the numbers can be re-run: `classifier/venv/bin/python samples/measure.py kannada3`.
