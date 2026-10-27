@@ -68,6 +68,9 @@ export default function Report({ result, synthetic = false }) {
           </p>
         </div>
         <Measure score={result.riskScore} level={level} t={t} />
+        {result.detection === "beta" && (
+          <p className="mt-5 max-w-[60ch] border-l-2 border-warn pl-3 text-[0.875rem] text-ink-2" data-testid="beta-note">{t("beta.note")}</p>
+        )}
       </section>
 
       {result.explanation && (
