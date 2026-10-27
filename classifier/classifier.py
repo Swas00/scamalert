@@ -20,13 +20,16 @@ def _pattern(phrase: str) -> re.Pattern:
 _SPACED_ACRONYMS = [
     (r"के\s*वाई\s*सी", "केवाईसी"), (r"ओ\s*टी\s*पी", "ओटीपी"), (r"यू\s*पी\s*आई|यु\s*पी\s*आई", "यूपीआई"),
     (r"सी\s*वी\s*वी", "सीवीवी"), (r"ए\s*टी\s*एम", "एटीएम"), (r"\bk\s*y\s*c\b", "kyc"),
-    (r"\bo\s*t\s*p\b", "otp"), (r"\bu\s*p\s*i\b", "upi"), (r"\bc\s*v\s*v\b", "cvv"),
+    (r"\bo\s*t\s*p\b", "otp"),
+    # Kannada (Prisma writes these letter by letter too)
+    (r"ಕೆ\s*ವೈ\s*ಸಿ", "ಕೆವೈಸಿ"), (r"[ಒಓ]\s*ಟಿ\s*ಪಿ", "ಒಟಿಪಿ"), (r"ಸಿ\s*ವಿ\s*ವಿ", "ಸಿವಿವಿ"),
+    (r"ಕ್ಯೂ\s*ಆರ್", "ಕ್ಯೂಆರ್"), (r"ಯು\s*ಪಿ\s*ಐ", "ಯುಪಿಐ"), (r"ಎ\s*ಟಿ\s*ಎಂ", "ಎಟಿಎಂ"), (r"\bu\s*p\s*i\b", "upi"), (r"\bc\s*v\s*v\b", "cvv"),
 ]
 _PUNCT = re.compile(r"[,.;:!?\"“”‘()\[\]।|-]+")
 
 
 def _normalize(text: str) -> str:
-    text = text.lower().replace("’", "'")
+    text = text.lower().replace("’", "'").replace("\u200c", "").replace("\u200d", "")  # drop zero-width joiners (Kannada/Hindi)
     text = _PUNCT.sub(" ", text)
     text = re.sub(r"\s+", " ", text).strip()
     for pattern, repl in _SPACED_ACRONYMS:
