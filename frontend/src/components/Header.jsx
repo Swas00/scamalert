@@ -15,7 +15,7 @@ export default function Header() {
       </a>
       <div className="flex items-center gap-5">
         <p className="label hidden md:block">{t("brand.tag")}</p>
-        <div role="group" aria-label={t("lang.toggle")} className="flex items-center rounded-[3px] border border-ink text-[0.8125rem]">
+        <div role="group" aria-label={t("lang.toggle")} className="flex items-center overflow-hidden rounded-lg border border-[rgba(150,180,220,0.34)] bg-[rgba(255,255,255,0.03)] text-[0.8125rem]">
           {[["en", "EN"], ["hi", "हिंदी"]].map(([code, label]) => (
             <button key={code} type="button" lang={code} aria-pressed={lang === code} onClick={() => setLang(code)}
               className="lang-btn min-h-[34px] min-w-[44px] px-3 font-medium">
