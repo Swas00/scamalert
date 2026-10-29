@@ -123,7 +123,7 @@ export default function InputPanel({ file, setFile, sample, setSample, lang, set
               <p className="label shrink-0">{duration ? fmt(duration) : "…"}</p>
             </div>
             <div className="mt-3"><Waveform peaks={peaks} scanning={loading} progress={progress} onSeek={loading ? undefined : seek} /></div>
-            <div className="mt-3 flex items-center justify-between gap-3">
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
               <button type="button" className="btn btn-ghost !px-3 !py-2 text-[0.8125rem]" onClick={togglePlay} disabled={loading || !peaks}>
                 {playing
                   ? <svg width="10" height="10" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1h3v10H2zM7 1h3v10H7z" fill="currentColor" /></svg>
