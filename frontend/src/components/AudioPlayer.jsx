@@ -20,7 +20,7 @@ export default function AudioPlayer({ src, label }) {
         onLoadedMetadata={(e) => setDur(e.currentTarget.duration)}
         onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
         onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} />
-      <button type="button" className="btn btn-primary !h-10 !w-10 !min-h-10 !min-w-10 shrink-0 !rounded-full !p-0"
+      <button type="button" className="btn btn-primary !h-11 !w-11 !min-h-11 !min-w-11 shrink-0 !rounded-full !p-0"
         aria-label={playing ? t("player.pause", { label }) : t("player.play", { label })}
         onClick={() => (playing ? el.current.pause() : el.current.play())}>
         {playing
