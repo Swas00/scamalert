@@ -55,6 +55,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-wrap: break-word; /* a long URL or token must never widen the page */
 }
 ::selection { background: var(--accent); color: var(--on-accent); }
 
@@ -74,6 +75,7 @@ body {
   color: var(--muted);
 }
 .display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.025em; line-height: 1.05; }
+.transcript, .display { overflow-wrap: anywhere; }
 .transcript { font-family: var(--font-sans); font-weight: 400; font-size: 1.125rem; line-height: 1.9; letter-spacing: 0.005em; }
 
 /* ---------- Buttons ---------- */
@@ -122,7 +124,7 @@ body {
 
 /* ---------- Glass panel: a calm, legible surface over the animated background ---------- */
 .panel {
-  position: relative;
+  position: relative; min-width: 0;
   background: var(--surface);
   -webkit-backdrop-filter: blur(16px) saturate(1.3); backdrop-filter: blur(16px) saturate(1.3);
   border: 1px solid var(--rule); border-radius: 14px; padding: 1.25rem;
