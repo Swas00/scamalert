@@ -61,7 +61,7 @@ export default function App() {
         <div className="min-w-0 lg:col-span-5">
           <h1 className="display text-[clamp(2.25rem,5.2vw,3.25rem)]">{t("h1.a")}<br />{t("h1.b")}</h1>
           <p className="mb-8 mt-4 max-w-[40ch] text-[1.0625rem] text-ink-2">{t("intro")}</p>
-          <div className="panel lg:sticky lg:top-8">
+          <div className="panel">
             <InputPanel {...{ file, setFile, sample, setSample, lang, setLang, loading, setError }} onAnalyze={analyze} />
           </div>
         </div>
