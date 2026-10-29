@@ -213,11 +213,18 @@ html[lang="hi"] .display { letter-spacing: 0; line-height: 1.25; }
 html[lang="hi"] h1.display { line-height: 1.2; }
 html[lang="hi"] body { line-height: 1.7; }
 
-/* ---------- Print: just the report, on white ---------- */
+/* ---------- Print: just the report, dark text on white (the screen theme is light-on-dark) ---------- */
 @media print {
-  :root { --paper: #fff; --surface: #fff; }
-  .skip-link, header, .lg\:col-span-5, footer, button, audio, .seek { display: none !important; }
-  main { border: 0 !important; padding: 0 !important; grid-column: 1 / -1 !important; }
+  :root {
+    --paper: #fff; --surface: #fff; --ink: #111; --ink-2: #333; --muted: #555; --rule: #ccc;
+    --danger: #b00020; --warn: #8a5a00; --safe: #17653a;
+    --danger-mark: #f6c9d0; --warn-mark: #f3dfb0; --safe-mark: #c8ead8; --accent: #0a6c7a; --on-ink: #fff;
+  }
+  html, body { background: #fff !important; color: #111; }
+  .dr-root, .skip-link, header, .lg\:col-span-5, footer, button, audio, .seek { display: none !important; }
+  .panel { background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  main { grid-column: 1 / -1 !important; }
+  .glow { text-shadow: none; }
   mark.hit { animation: none !important; background-size: 100% 100% !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
