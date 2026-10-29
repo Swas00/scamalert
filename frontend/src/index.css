@@ -180,7 +180,8 @@ mark.hit {
 .skel { background: color-mix(in srgb, var(--ink) 9%, transparent); border-radius: 2px; animation: breathe 1.6s ease-in-out infinite; }
 
 /* ---------- Audio player ---------- */
-.seek { appearance: none; width: 100%; height: 18px; background: transparent; cursor: pointer; }
+.seek { appearance: none; width: 100%; height: 18px; background: transparent; cursor: pointer; touch-action: pan-y; }
+@media (pointer: coarse) { .seek { height: 44px; } }
 .seek::-webkit-slider-runnable-track { height: 2px; background: linear-gradient(to right, var(--accent) var(--p, 0%), rgba(150, 180, 220, 0.28) var(--p, 0%)); }
 .seek::-moz-range-track { height: 2px; background: rgba(150, 180, 220, 0.28); }
 .seek::-moz-range-progress { height: 2px; background: var(--accent); }
