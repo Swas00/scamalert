@@ -7,6 +7,9 @@ import { useI18n } from "../lib/i18n.jsx";
 
 const fmt = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 
+// Recording needs getUserMedia (secure context) and MediaRecorder; older iOS and plain-HTTP pages lack one of them.
+const CAN_RECORD = typeof window !== "undefined" && window.isSecureContext !== false && !!navigator.mediaDevices?.getUserMedia && typeof window.MediaRecorder !== "undefined";
+
 export default function InputPanel({ file, setFile, sample, setSample, lang, setLang, onAnalyze, loading, setError }) {
   const { t } = useI18n();
   const [recording, setRecording] = useState(false);
@@ -137,11 +140,12 @@ export default function InputPanel({ file, setFile, sample, setSample, lang, set
         )}
 
         <div className="mt-4 flex items-center gap-3">
-          <button type="button" onClick={toggleRecord} disabled={loading}
+          <button type="button" onClick={toggleRecord} disabled={loading || !CAN_RECORD}
             className={`btn ${recording ? "btn-record-live" : "btn-ghost"}`} aria-pressed={recording}>
             {recording ? (<><span className="rec-dot" aria-hidden="true" /> {t("rec.stop", { t: fmt(recSeconds), max: fmt(MAX_SECONDS) })}</>) : t("rec.start")}
           </button>
         </div>
+        {!CAN_RECORD && <p className="mt-2 text-[0.8125rem] text-muted">{t("rec.unsupported")}</p>}
       </section>
 
       <section aria-labelledby="samples">
