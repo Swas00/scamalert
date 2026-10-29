@@ -92,7 +92,7 @@ export default function Report({ result, synthetic = false }) {
       </section>
 
       {result.warningAudio && (
-        <section className="reveal" style={{ "--i": 3 }} aria-label={t("warn.title")}>
+        <section className="reveal no-print" style={{ "--i": 3 }} aria-label={t("warn.title")}>
           <p className="label mb-2">{t("warn.title")} <span className="normal-case tracking-normal">{t("warn.by")}</span></p>
           <AudioPlayer src={result.warningAudio} label={t("warn.label")} />
         </section>
@@ -119,7 +119,7 @@ export default function Report({ result, synthetic = false }) {
         </section>
       )}
 
-      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-rule pt-6">
+      <div className="no-print flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-rule pt-6">
         <button type="button" className="btn btn-ghost" onClick={save} disabled={saving === "busy"}>
           {saving === "busy" ? t("save.busy") : t("save")}
         </button>

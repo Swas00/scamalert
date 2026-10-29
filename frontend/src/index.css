@@ -225,6 +225,7 @@ html[lang="hi"] body { line-height: 1.7; }
   .panel { background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
   main { grid-column: 1 / -1 !important; }
   .glow { text-shadow: none; }
+  .no-print { display: none !important; }
   mark.hit { animation: none !important; background-size: 100% 100% !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .reveal { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
