@@ -15,7 +15,7 @@ export default function AudioPlayer({ src, label }) {
 
   const pct = dur ? (time / dur) * 100 : 0;
   return (
-    <div className="flex w-full max-w-[34rem] items-center gap-3 border-y border-rule py-3 sm:gap-4">
+    <div className="flex w-full max-w-[34rem] flex-wrap items-center gap-x-3 gap-y-1 border-y border-rule py-3 sm:gap-x-4">
       <audio ref={el} src={src} preload="metadata"
         onLoadedMetadata={(e) => setDur(e.currentTarget.duration)}
         onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
@@ -27,9 +27,9 @@ export default function AudioPlayer({ src, label }) {
           ? <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1h3v10H2zM7 1h3v10H7z" fill="currentColor" /></svg>
           : <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1l8 5-8 5z" fill="currentColor" /></svg>}
       </button>
-      <input type="range" className="seek min-w-0 flex-1" min={0} max={dur || 0} step="0.05" value={time} aria-label={t("player.seek")} style={{ "--p": `${pct}%` }}
+      <input type="range" className="seek min-w-[6rem] flex-1" min={0} max={dur || 0} step="0.05" value={time} aria-label={t("player.seek")} style={{ "--p": `${pct}%` }}
         onChange={(e) => { el.current.currentTime = Number(e.target.value); setTime(Number(e.target.value)); }} />
-      <span className="label shrink-0 whitespace-nowrap tabular-nums">{fmt(time)} / {fmt(dur)}</span>
+      <span className="label ml-auto shrink-0 whitespace-nowrap tabular-nums">{fmt(time)} / {fmt(dur)}</span>
     </div>
   );
 }
