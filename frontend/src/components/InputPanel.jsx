@@ -161,11 +161,11 @@ export default function InputPanel({ file, setFile, sample, setSample, lang, set
         <label className="label mb-3 block" id="step2" htmlFor="lang">{t("step2")}</label>
         <div className="relative">
           <select id="lang" value={lang} onChange={(e) => setLang(e.target.value)} disabled={loading}
-            className="w-full appearance-none rounded-[3px] border border-ink bg-transparent py-3 pl-3.5 pr-10 text-[0.9375rem] text-ink">
+            className="w-full appearance-none rounded-lg border border-[rgba(150,180,220,0.34)] bg-[rgba(255,255,255,0.03)] py-3 pl-3.5 pr-10 text-[0.9375rem] text-ink transition-colors hover:border-accent">
             {LANG_CODES.map((c) => <option key={c} value={c}>{t(`lang.${c}`)}</option>)}
           </select>
           <svg className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2" width="12" height="8" viewBox="0 0 12 8" aria-hidden="true">
-            <path d="M1 1.5l5 5 5-5" fill="none" stroke="var(--ink)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M1 1.5l5 5 5-5" fill="none" stroke="var(--accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </div>
       </section>
