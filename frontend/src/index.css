@@ -226,7 +226,7 @@ html[lang="hi"] body { line-height: 1.7; }
   html, body { background: #fff !important; color: #111; }
   .dr-root, .skip-link, header, .lg\:col-span-5, footer, button, audio, .seek { display: none !important; }
   .panel { background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
-  main { grid-column: 1 / -1 !important; }
+  #results { grid-column: 1 / -1 !important; }
   .glow { text-shadow: none; }
   .no-print { display: none !important; }
   mark.hit { animation: none !important; background-size: 100% 100% !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
