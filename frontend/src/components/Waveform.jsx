@@ -22,20 +22,22 @@ export default function Waveform({ peaks, scanning, progress = 0, onSeek }) {
   return (
     <div ref={box} className={`relative h-14 w-full overflow-hidden ${seekable ? "cursor-pointer" : ""}`}
       style={{ "--scan-w": `${Math.max(0, w - 2)}px` }}
-      role="img" aria-label={peaks ? t("wave.alt") : t("wave.none")}
       onClick={seekable ? (e) => { const r = e.currentTarget.getBoundingClientRect(); onSeek(Math.min(1, Math.max(0, (e.clientX - r.left) / r.width))); } : undefined}>
-      {peaks ? (
-        <svg width="100%" height={H} viewBox={`0 0 ${peaks.length * 4} ${H}`} preserveAspectRatio="none" aria-hidden="true">
-          {peaks.map((p, i) => {
-            const h = Math.max(2, p * (H - 6));
-            const played = i / peaks.length < progress;
-            return <rect key={i} x={i * 4 + 0.5} y={(H - h) / 2} width="2.2" height={h} rx="1"
-              fill={played ? "var(--accent)" : "var(--ink-2)"} opacity={played ? 1 : scanning ? 0.85 : 0.55} />;
-          })}
-        </svg>
-      ) : (
-        <div className="h-full border-y border-dashed border-rule" />
-      )}
+      {/* The picture is its own image element; the keyboard slider below is a sibling, not a child (interactive controls must not sit inside role="img"). */}
+      <div role="img" aria-label={peaks ? t("wave.alt") : t("wave.none")} className="h-full">
+        {peaks ? (
+          <svg width="100%" height={H} viewBox={`0 0 ${peaks.length * 4} ${H}`} preserveAspectRatio="none" aria-hidden="true">
+            {peaks.map((p, i) => {
+              const h = Math.max(2, p * (H - 6));
+              const played = i / peaks.length < progress;
+              return <rect key={i} x={i * 4 + 0.5} y={(H - h) / 2} width="2.2" height={h} rx="1"
+                fill={played ? "var(--accent)" : "var(--ink-2)"} opacity={played ? 1 : scanning ? 0.85 : 0.55} />;
+            })}
+          </svg>
+        ) : (
+          <div className="h-full border-y border-dashed border-rule" />
+        )}
+      </div>
       {scanning && <div className="scanline" aria-hidden="true" />}
       {showHead && <div className="playhead" style={{ left: `${progress * 100}%` }} aria-hidden="true" />}
       {seekable && (
