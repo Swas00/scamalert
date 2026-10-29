@@ -192,7 +192,7 @@ mark.hit {
   select { font-size: 1rem; min-height: 48px; }
   .link-quiet { display: inline-block; padding-block: 0.8rem; }
   .lang-btn { min-height: 44px; }
-  .skip-link { padding-block: 0.85rem; }
+  .skip-link { min-height: 44px; display: inline-flex; align-items: center; padding-block: 0.5rem; }
   header a { min-height: 44px; display: inline-flex; align-items: center; }
 }
 
