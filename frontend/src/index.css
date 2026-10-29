@@ -133,7 +133,7 @@ body {
 
 @keyframes sweep { from { background-size: 0% 100%; } to { background-size: 100% 100%; } }
 mark.hit {
-  color: inherit;
+  color: inherit; background-color: transparent; /* the browser default <mark> yellow must not show through the translucent highlight */
   background-image: linear-gradient(var(--mark, var(--danger-mark)), var(--mark, var(--danger-mark)));
   background-repeat: no-repeat; background-position: 0 85%; background-size: 100% 100%;
   padding: 0 0.12em; margin: 0 -0.12em; border-radius: 2px;
