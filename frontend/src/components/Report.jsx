@@ -115,9 +115,9 @@ export default function Report({ result, synthetic = false }) {
       )}
 
       {result.riskScore < 30 && (
-        <section className="reveal border-t border-rule pt-6" style={{ "--i": 3 }} aria-label={t("safe.note").slice(0, 20)}>
+        <div className="reveal border-t border-rule pt-6" style={{ "--i": 3 }}>
           <p className="max-w-[60ch] text-[0.9375rem] text-ink-2">{t("safe.note")}</p>
-        </section>
+        </div>
       )}
 
       <div className="no-print flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-rule pt-6">
