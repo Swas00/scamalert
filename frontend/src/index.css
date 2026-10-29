@@ -2,44 +2,29 @@
 
 /* ---------- Design tokens ---------- */
 :root {
-  --paper: #f3efe6;
-  --surface: #fbf9f4;
-  --ink: #1c1b18;
-  --ink-2: #4a4740;
-  --muted: #6b665b;
-  --rule: #d5cfc0;
-  --danger: #b22e18;
-  --danger-mark: #f4c9bd;
-  --warn: #8f5200;
-  --warn-mark: #f1dca0;
-  --safe: #2a6a3c;
-  --safe-mark: #cfe4d4;
-  --signal: #0e5a5f;
-  --on-ink: #f3efe6;
+  /* Dark "signal" theme. The rain palette (cyan / violet / pink) is for interaction and atmosphere; risk colours stay separate. */
+  --paper: #05070d;
+  --surface: rgba(8, 12, 22, 0.78); /* glass panels over the rain; text contrast verified against #0b1120 and #16213a */
+  --ink: #e9f1f8;
+  --ink-2: #b4c0d0;
+  --muted: #8a98ad;
+  --rule: rgba(150, 180, 220, 0.2);
+  --danger: #ff6b86;
+  --danger-mark: rgba(255, 107, 134, 0.3);
+  --warn: #ffb547;
+  --warn-mark: rgba(255, 181, 71, 0.28);
+  --safe: #3be6a8;
+  --safe-mark: rgba(59, 230, 168, 0.24);
+  --accent: #22e6ff;
+  --on-accent: #02121a;
+  --signal: #ff3d9a;
+  --on-ink: #05070d;
 
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --t-fast: 120ms;
   --t-base: 220ms;
   --t-reveal: 420ms;
   --t-count: 700ms;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #14130f;
-    --surface: #1d1c17;
-    --ink: #ede8dc;
-    --ink-2: #b9b3a4;
-    --muted: #948e80;
-    --rule: #37352d;
-    --danger: #ff8a73;
-    --danger-mark: #5a2519;
-    --warn: #f0b35a;
-    --warn-mark: #4e3a12;
-    --safe: #7cc592;
-    --safe-mark: #1f4a2b;
-    --signal: #5cc1c7;
-    --on-ink: #14130f;
-  }
 }
 
 @theme inline {
@@ -53,16 +38,17 @@
   --color-warn: var(--warn);
   --color-safe: var(--safe);
   --color-signal: var(--signal);
-  --font-display: "Fraunces", "Noto Serif Devanagari", Georgia, serif;
-  --font-sans: "Public Sans", "Noto Sans Devanagari", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", "Noto Sans Devanagari", ui-monospace, Menlo, monospace;
+  --color-accent: var(--accent);
+  --font-display: "Space Grotesk", "Noto Sans Devanagari", "Noto Sans Kannada", system-ui, sans-serif;
+  --font-sans: "Public Sans", "Noto Sans Devanagari", "Noto Sans Kannada", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", "Noto Sans Devanagari", "Noto Sans Kannada", ui-monospace, Menlo, monospace;
 }
 
 /* ---------- Base ---------- */
-html { background: var(--paper); color-scheme: light dark; }
+html { background: var(--dr-bg-0, var(--paper)); color-scheme: dark; }
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--dr-bg-0, var(--paper));
   color: var(--ink);
   font-family: var(--font-sans);
   font-size: 1rem;
