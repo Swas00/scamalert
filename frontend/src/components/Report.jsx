@@ -60,7 +60,7 @@ export default function Report({ result, synthetic = false }) {
         <p className="label">{t("verdict")}</p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-x-8 gap-y-2">
           <div>
-            <h2 className={`display text-[clamp(2.25rem,6vw,3.5rem)] ${level.cls}`}>{t(`level.${level.key}`)}</h2>
+            <h2 className={`display glow text-[clamp(2.25rem,6vw,3.5rem)] ${level.cls}`}>{t(`level.${level.key}`)}</h2>
             {category && <p className="mt-1 text-[1.0625rem] text-ink-2">{t("looks.like")} <strong className="font-semibold text-ink">{category}</strong></p>}
           </div>
           <p className="display text-[clamp(4rem,11vw,7.5rem)] leading-[0.85] tabular-nums" aria-label={t("score.aria", { n: result.riskScore })}>

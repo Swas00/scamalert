@@ -117,6 +117,9 @@ body {
 }
 .link-quiet:hover { text-decoration-color: var(--accent); color: var(--accent); }
 
+/* Soft glow in the verdict's own colour, so the result reads as the focal point of the panel. */
+.glow { text-shadow: 0 0 34px color-mix(in srgb, currentColor 42%, transparent); }
+
 /* ---------- Glass panel: a calm, legible surface over the animated background ---------- */
 .panel {
   position: relative;
