@@ -166,11 +166,11 @@ mark.hit {
 
 /* ---------- Audio player ---------- */
 .seek { appearance: none; width: 100%; height: 18px; background: transparent; cursor: pointer; }
-.seek::-webkit-slider-runnable-track { height: 2px; background: linear-gradient(to right, var(--ink) var(--p, 0%), var(--rule) var(--p, 0%)); }
-.seek::-moz-range-track { height: 2px; background: var(--rule); }
-.seek::-moz-range-progress { height: 2px; background: var(--ink); }
-.seek::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; margin-top: -5px; border-radius: 50%; background: var(--ink); border: 0; }
-.seek::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--ink); border: 0; }
+.seek::-webkit-slider-runnable-track { height: 2px; background: linear-gradient(to right, var(--accent) var(--p, 0%), rgba(150, 180, 220, 0.28) var(--p, 0%)); }
+.seek::-moz-range-track { height: 2px; background: rgba(150, 180, 220, 0.28); }
+.seek::-moz-range-progress { height: 2px; background: var(--accent); }
+.seek::-webkit-slider-thumb { appearance: none; width: 12px; height: 12px; margin-top: -5px; border-radius: 50%; background: var(--accent); border: 0; box-shadow: 0 0 10px rgba(34, 230, 255, 0.6); }
+.seek::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); border: 0; }
 
 /* ---------- Touch devices: comfortable targets, and 16px form text so iOS Safari doesn't zoom on focus ---------- */
 @media (pointer: coarse) {
