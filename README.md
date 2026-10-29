@@ -69,3 +69,13 @@ Use synthetic or test audio only: no real calls, phone/account/Aadhaar/PAN numbe
 | Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi | yes | **no**: the transcript is shown without a verdict | no |
 
 The interface is available in English and Hindi. Hindi and Kannada text has not been reviewed by a native speaker.
+
+## Frontend design and the DataRain background
+The interface is a dark glass-panel design over an animated canvas background (`frontend/src/components/ui/data-rain.tsx`).
+
+- **Where things live:** reusable UI primitives go in `frontend/src/components/ui/` (the shadcn convention: the shadcn CLI writes there and `@/components/ui/...` is the import path other tools expect); app-specific components stay in `frontend/src/components/`. Styles and design tokens are in `frontend/src/index.css`.
+- **TypeScript:** the app is JavaScript, but `.tsx` components work out of the box (Vite compiles them). `npm run typecheck` checks the TypeScript files. The `@/` alias maps to `frontend/src/` (see `vite.config.js` and `tsconfig.json`).
+- **shadcn CLI:** not installed, because the component is self-contained. To add more shadcn components later, run `npx shadcn@latest init` in `frontend/` and point its aliases at `@/components`.
+- **Tuning the background:** `<DataRain />` accepts `count`, `flowSpeed`, `obstacleRadius`, `autopilot`, `fullscreen` and `palette`. Its colours come from the `--dr-*` variables in `index.css`. It never takes pointer events, pauses when the tab is hidden, lowers its own particle count on slow devices, and renders a single static frame (no animation loop) when the visitor prefers reduced motion.
+- **Legibility:** all text sits on `.panel` glass surfaces; text colours are checked for WCAG AA contrast against the panel colour, including when bright streaks show through.
+- **Printing:** the print stylesheet switches to dark-on-white and leaves out the background and controls.
