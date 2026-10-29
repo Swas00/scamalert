@@ -7,6 +7,7 @@ import Skeleton from "./components/Skeleton.jsx";
 import { useElapsed } from "./lib/hooks.js";
 import { useI18n } from "./lib/i18n.jsx";
 import { detectionFor } from "./lib/samples.js";
+import DataRain from "@/components/ui/data-rain";
 
 // Empty in local dev (Vite proxies /api); set VITE_API_URL to the deployed backend in production.
 const API = import.meta.env.VITE_API_URL || "";
@@ -50,7 +51,9 @@ export default function App() {
   }
 
   return (
-    <div className="mx-auto max-w-[1120px] px-4 pb-16 pt-6 sm:px-8 sm:pt-8">
+    <>
+    <DataRain />
+    <div className="relative z-10 mx-auto max-w-[1120px] px-4 pb-16 pt-6 sm:px-8 sm:pt-8">
       <a href="#results" className="skip-link">{t("skip")}</a>
       <Header />
 
@@ -86,5 +89,6 @@ export default function App() {
         {t("foot.page")}
       </footer>
     </div>
+    </>
   );
 }
