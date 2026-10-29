@@ -57,16 +57,16 @@ export default function App() {
       <a href="#results" className="skip-link">{t("skip")}</a>
       <Header />
 
-      <div className="mt-10 grid gap-x-16 gap-y-12 lg:grid-cols-12 lg:mt-14">
+      <div className="mt-10 grid gap-x-10 gap-y-10 lg:grid-cols-12 lg:mt-14">
         <div className="lg:col-span-5">
           <h1 className="display text-[clamp(2.25rem,5.2vw,3.25rem)]">{t("h1.a")}<br />{t("h1.b")}</h1>
-          <p className="mb-9 mt-4 max-w-[40ch] text-[1.0625rem] text-ink-2">{t("intro")}</p>
-          <div className="lg:sticky lg:top-8">
+          <p className="mb-8 mt-4 max-w-[40ch] text-[1.0625rem] text-ink-2">{t("intro")}</p>
+          <div className="panel lg:sticky lg:top-8">
             <InputPanel {...{ file, setFile, sample, setSample, lang, setLang, loading, setError }} onAnalyze={analyze} />
           </div>
         </div>
 
-        <main id="results" tabIndex={-1} ref={reportRef} className="scroll-mt-4 lg:col-span-7 lg:border-l lg:border-rule lg:pl-16" aria-busy={loading}>
+        <main id="results" tabIndex={-1} ref={reportRef} className="panel scroll-mt-4 lg:col-span-7" aria-busy={loading}>
           {error && (
             <div role="alert" className="reveal mb-8 border-l-2 border-danger pl-4 text-[0.9375rem]">
               <p className="font-medium text-danger">{t("err.title")}</p>
