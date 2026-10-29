@@ -125,6 +125,9 @@ body {
 /* Soft glow in the verdict's own colour, so the result reads as the focal point of the panel. */
 .glow { text-shadow: 0 0 34px color-mix(in srgb, currentColor 42%, transparent); }
 
+/* On the very narrowest phones the three meter labels cannot fit on one line at a readable size; the tick marks still show the zones. */
+@media (max-width: 339px) { .meter-mid { display: none; } }
+
 /* ---------- Glass panel: a calm, legible surface over the animated background ---------- */
 .panel {
   position: relative; min-width: 0;
