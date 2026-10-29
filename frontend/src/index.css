@@ -193,7 +193,7 @@ mark.hit {
   .chip { min-height: 44px; padding-block: 0.6rem; }
   .btn { min-height: 44px; }
   select { font-size: 1rem; min-height: 48px; }
-  .link-quiet { display: inline-block; padding-block: 0.8rem; }
+  button.link-quiet { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding-inline: 0.5rem; } /* inline text links keep normal line height */
   .lang-btn { min-height: 44px; }
   .skip-link { min-height: 44px; display: inline-flex; align-items: center; padding-block: 0.5rem; }
   header a { min-height: 44px; display: inline-flex; align-items: center; }
