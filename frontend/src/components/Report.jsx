@@ -14,8 +14,8 @@ function Measure({ score, level, t }) {
         <div className="measure-fill absolute inset-y-0 left-0 rounded-full" style={{ width: `${score}%`, background: level.bar }} />
         {[30, 70].map((p) => <span key={p} className="absolute -top-1 h-[14px] w-px bg-ink-2/50" style={{ left: `${p}%` }} aria-hidden="true" />)}
       </div>
-      <div className="label mt-2 flex" aria-hidden="true">
-        <span style={{ width: "30%" }}>{t("meter.safe")}</span><span style={{ width: "40%" }}>{t("meter.mid")}</span><span className="flex-1 text-right">{t("meter.high")}</span>
+      <div className="label mt-2 grid grid-cols-[auto_1fr_auto] gap-x-2 text-[0.6875rem] tracking-[0.04em] sm:text-xs sm:tracking-[0.08em]" aria-hidden="true">
+        <span>{t("meter.safe")}</span><span className="text-center">{t("meter.mid")}</span><span className="text-right">{t("meter.high")}</span>
       </div>
     </div>
   );
