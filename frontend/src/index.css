@@ -81,41 +81,41 @@ body {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
   font: 500 0.9375rem/1 var(--font-sans);
   padding: 0.8rem 1.1rem;
-  border: 1px solid var(--ink);
-  border-radius: 3px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease),
+  transition: background-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), box-shadow var(--t-base) var(--ease),
     transform var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
 }
 .btn:active:not(:disabled) { transform: translateY(1px) scale(0.985); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-.btn-primary { background: var(--ink); color: var(--on-ink); }
-.btn-primary:hover:not(:disabled) { background: var(--ink-2); border-color: var(--ink-2); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+.btn-primary:hover:not(:disabled) { background: #6cf0ff; border-color: #6cf0ff; box-shadow: 0 0 0 4px rgba(34, 230, 255, 0.14), 0 0 28px rgba(34, 230, 255, 0.35); }
 .btn-primary .arrow { transition: transform var(--t-base) var(--ease); }
 .btn-primary:hover:not(:disabled) .arrow { transform: translateX(3px); }
-.btn-ghost { background: transparent; color: var(--ink); }
-.btn-ghost:hover:not(:disabled) { background: var(--ink); color: var(--on-ink); }
-.btn-record-live { background: var(--danger); border-color: var(--danger); color: var(--paper); }
+.btn-ghost { background: rgba(255, 255, 255, 0.03); border-color: rgba(150, 180, 220, 0.34); color: var(--ink); }
+.btn-ghost:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 22px rgba(34, 230, 255, 0.18); }
+.btn-record-live { background: var(--danger); border-color: var(--danger); color: var(--on-ink); box-shadow: 0 0 26px rgba(255, 107, 134, 0.4); }
 
 .chip {
   font: 400 0.8125rem/1.3 var(--font-sans);
-  padding: 0.45rem 0.75rem;
+  padding: 0.45rem 0.8rem;
   border: 1px solid var(--rule);
   border-radius: 999px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.03);
   color: var(--ink-2);
   cursor: pointer;
   text-align: left;
-  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease);
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease), box-shadow var(--t-base) var(--ease);
 }
-.chip:hover { border-color: var(--ink); color: var(--ink); }
-.chip[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--on-ink); }
+.chip:hover { border-color: var(--accent); color: var(--ink); }
+.chip[aria-pressed="true"] { border-color: var(--accent); background: rgba(34, 230, 255, 0.14); color: var(--ink); box-shadow: 0 0 18px rgba(34, 230, 255, 0.2); }
 
 .link-quiet {
-  color: var(--ink); text-decoration: underline; text-decoration-color: var(--rule);
-  text-underline-offset: 3px; transition: text-decoration-color var(--t-fast) var(--ease);
+  color: var(--ink); text-decoration: underline; text-decoration-color: rgba(34, 230, 255, 0.5);
+  text-underline-offset: 3px; transition: text-decoration-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
 }
-.link-quiet:hover { text-decoration-color: var(--ink); }
+.link-quiet:hover { text-decoration-color: var(--accent); color: var(--accent); }
 
 /* ---------- Dropzone ---------- */
 .dropzone {
