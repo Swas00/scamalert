@@ -30,7 +30,7 @@ export default function Waveform({ peaks, scanning, progress = 0, onSeek }) {
             const h = Math.max(2, p * (H - 6));
             const played = i / peaks.length < progress;
             return <rect key={i} x={i * 4 + 0.5} y={(H - h) / 2} width="2.2" height={h} rx="1"
-              fill={played ? "var(--ink)" : "var(--ink-2)"} opacity={played ? 1 : scanning ? 0.9 : 0.6} />;
+              fill={played ? "var(--accent)" : "var(--ink-2)"} opacity={played ? 1 : scanning ? 0.85 : 0.55} />;
           })}
         </svg>
       ) : (
