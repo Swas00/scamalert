@@ -108,7 +108,7 @@ export default function Report({ result, synthetic = false }) {
               t("todo.2"),
               <>{t("todo.3a")}<strong className="text-ink">1930</strong>{t("todo.3b")}<a className="link-quiet" href="https://cybercrime.gov.in" target="_blank" rel="noreferrer">cybercrime.gov.in</a>{lang === "en" ? "." : "।"}</>,
             ].map((item, i) => (
-              <li key={i} className="grid grid-cols-[1.5rem_1fr]"><span className="label pt-[3px]">{i + 1}.</span><span>{item}</span></li>
+              <li key={i} className="grid grid-cols-[1.5rem_minmax(0,1fr)]"><span className="label pt-[3px]">{i + 1}.</span><span className="min-w-0 [overflow-wrap:anywhere]">{item}</span></li>
             ))}
           </ol>
         </section>

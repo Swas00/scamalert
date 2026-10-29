@@ -10,7 +10,7 @@ export default function EmptyReport() {
         <p className="label mb-4">{t("how.title")}</p>
         <ol className="space-y-6">
           {[1, 2, 3].map((n) => (
-            <li key={n} className="grid grid-cols-[2.25rem_1fr] border-t border-rule pt-4">
+            <li key={n} className="grid grid-cols-[2.25rem_minmax(0,1fr)] border-t border-rule pt-4">
               <span className="label pt-1">0{n}</span>
               <span><span className="display block text-[1.25rem]">{t(`how.${n}.h`)}</span><span className="mt-1 block max-w-[52ch] text-[0.9375rem] text-ink-2">{t(`how.${n}.t`)}</span></span>
             </li>
