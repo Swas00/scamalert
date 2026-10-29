@@ -3,6 +3,7 @@ import { segments } from "../lib/highlight.js";
 import { levelOf } from "../lib/samples.js";
 import { useCountUp } from "../lib/hooks.js";
 import { saveResultCard } from "../lib/shareCard.js";
+import { langOf } from "../lib/script.js";
 import { useI18n } from "../lib/i18n.jsx";
 import AudioPlayer from "./AudioPlayer.jsx";
 
@@ -30,7 +31,7 @@ function TranscriptOnly({ result, t }) {
       </section>
       <section className="reveal" style={{ "--i": 1 }} aria-label={t("transcript")}>
         <p className="label mb-3">{t("transcript")}</p>
-        <p className="transcript max-w-[62ch] border-l-2 border-rule pl-5">{result.transcript || t("transcript.none")}</p>
+        <p className="transcript max-w-[62ch] border-l-2 border-rule pl-5" lang={langOf(result.transcript)}>{result.transcript || t("transcript.none")}</p>
       </section>
     </div>
   );
@@ -82,7 +83,7 @@ export default function Report({ result, synthetic = false }) {
 
       <section className="reveal" style={{ "--i": 2 }} aria-label={t("transcript")}>
         <p className="label mb-3">{t("transcript")}{flags.length > 0 && <span className="normal-case tracking-normal">{t("transcript.marked")}</span>}</p>
-        <p className="transcript max-w-[62ch] border-l-2 border-rule pl-5" lang={/[ऀ-ॿ]/.test(result.transcript) ? "hi" : "en"}>
+        <p className="transcript max-w-[62ch] border-l-2 border-rule pl-5" lang={langOf(result.transcript)}>
           {result.transcript
             ? parts.map((p, i) => p.hit
               ? <mark key={i} className="hit" style={{ "--mark": level.mark, "--n": hitIndex++ }}>{p.text}</mark>
