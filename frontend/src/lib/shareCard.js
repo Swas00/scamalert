@@ -2,9 +2,9 @@
 // No transcript text is drawn - only the verdict and the short flagged phrases - so a card is safe to post.
 
 const W = 1200, H = 630, PAD = 64, SCALE = 2;
-const SERIF = '"Fraunces", "Noto Serif Devanagari", Georgia, serif';
-const SANS = '"Public Sans", "Noto Sans Devanagari", system-ui, sans-serif';
-const MONO = '"IBM Plex Mono", ui-monospace, Menlo, monospace';
+const SERIF = '"Space Grotesk", "Noto Sans Devanagari", "Noto Sans Kannada", system-ui, sans-serif'; // display face (name kept from the old design)
+const SANS = '"Public Sans", "Noto Sans Devanagari", "Noto Sans Kannada", system-ui, sans-serif';
+const MONO = '"IBM Plex Mono", "Noto Sans Devanagari", "Noto Sans Kannada", ui-monospace, Menlo, monospace';
 
 function tokens() {
   const css = getComputedStyle(document.documentElement);
@@ -14,13 +14,13 @@ function tokens() {
 
 async function loadFonts() {
   await Promise.all([
-    document.fonts.load(`600 72px Fraunces`, "High risk 0123456789"),
-    document.fonts.load(`400 26px "Noto Serif Devanagari"`, "अआक"),
-    document.fonts.load(`400 24px Fraunces`, "phrase"),
-    document.fonts.load(`500 22px "Public Sans"`, "Looks like"),
+    document.fonts.load(`600 72px "Space Grotesk"`, "High risk 0123456789"),
+    document.fonts.load(`500 26px "Public Sans"`, "Looks like phrase"),
     document.fonts.load(`500 14px "IBM Plex Mono"`, "SAFE"),
+    document.fonts.load(`600 72px "Noto Sans Devanagari"`, "अआक"),
     document.fonts.load(`400 28px "Noto Sans Devanagari"`, "अआक"),
-    document.fonts.load(`600 72px "Noto Serif Devanagari"`, "अआक"),
+    document.fonts.load(`600 72px "Noto Sans Kannada"`, "ಅಆಕ"),
+    document.fonts.load(`400 28px "Noto Sans Kannada"`, "ಅಆಕ"),
   ].map((p) => p.catch(() => null)));
 }
 
@@ -58,6 +58,12 @@ export async function renderResultCard(result, { synthetic = false, t: tr, categ
   ctx.textBaseline = "alphabetic";
 
   ctx.fillStyle = t.paper; ctx.fillRect(0, 0, W, H);
+  // Faint glows echoing the animated background: cyan top-left, pink bottom-right.
+  for (const [gx, gy, rgb] of [[120, 40, "34,230,255"], [W - 80, H - 20, "255,61,154"]]) {
+    const g = ctx.createRadialGradient(gx, gy, 0, gx, gy, 520);
+    g.addColorStop(0, `rgba(${rgb},0.16)`); g.addColorStop(1, `rgba(${rgb},0)`);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
 
   // wordmark: same glyph as the site header/favicon, drawn in a 30px box aligned to the text
   ctx.fillStyle = t.ink; ctx.font = `600 30px ${SERIF}`; ctx.fillText("ScamAlert", PAD + 40, 85);
@@ -111,7 +117,7 @@ export async function renderResultCard(result, { synthetic = false, t: tr, categ
     ctx.fillStyle = t.ink2; ctx.font = `400 26px ${SANS}`;
     ctx.fillText(tr("card.none"), PAD, 450);
   } else {
-    ctx.font = `400 26px ${SERIF}`;
+    ctx.font = `500 26px ${SANS}`;
     let x = PAD, y = 452; const gap = 14, rowH = 50, maxX = W - PAD;
     for (const raw of flags) {
       const label = fit(ctx, raw, 330);
