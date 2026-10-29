@@ -53,7 +53,7 @@ export default function App() {
   return (
     <>
     <DataRain />
-    <div className="relative z-10 mx-auto max-w-[1120px] px-4 pb-16 pt-6 sm:px-8 sm:pt-8">
+    <div className="relative z-10 mx-auto max-w-[70rem] px-4 pb-16 pt-6 sm:px-8 sm:pt-8">
       <a href="#results" className="skip-link">{t("skip")}</a>
       <Header />
 

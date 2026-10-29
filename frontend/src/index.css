@@ -46,6 +46,9 @@
 
 /* ---------- Base ---------- */
 html { background: var(--dr-bg-0, var(--paper)); color-scheme: dark; }
+/* Large displays: scale the whole interface (everything is rem-based) instead of leaving a small column in a sea of rain. */
+@media (min-width: 1800px) { html { font-size: 112.5%; } }
+@media (min-width: 2400px) { html { font-size: 125%; } }
 body {
   margin: 0;
   background: var(--dr-bg-0, var(--paper));
