@@ -7,7 +7,7 @@ const escape = (c) => c.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 function phrasePattern(phrase) {
   const body = [...phrase].filter((c) => !/\s/.test(c)).map(escape).join(GAP);
   // Latin phrases must not match inside longer words ("otp" in "robotp"); Devanagari has no such boundary.
-  return /^[\x00-\x7f]+$/.test(phrase) ? `(?<![\\p{L}\\p{N}])${body}(?![\\p{L}\\p{N}])` : body;
+  return [...phrase].every((c) => c.charCodeAt(0) < 128) ? `(?<![\\p{L}\\p{N}])${body}(?![\\p{L}\\p{N}])` : body;
 }
 
 export function segments(text, phrases) {
