@@ -66,6 +66,8 @@ Python dependencies are installed from `classifier/requirements.lock` (the exact
 3. **Vercel:** import the repo with root directory `frontend`, and set `VITE_API_URL` to the backend's Render URL. Then put the Vercel URL into the backend's `FRONTEND_ORIGIN` on Render and redeploy it.
 4. Check `https://<backend>/api/health`, then try a sample call on the site.
 
+**Service-to-service address:** on Render, set the backend's `CLASSIFIER_URL` to the classifier's **Internal** address (classifier service → Connect → Internal; `http://<name>:<port>`, same region and workspace), not its public `https://…onrender.com` address, which Render's edge can bot-challenge (HTTP 429 "Just a moment…") when called server-to-server. The single-container image avoids this entirely.
+
 Notes: Render's free tier sleeps after inactivity (first request can take about a minute), so open the site before recording a demo. `/api/analyze` is rate limited per IP (`RATE_LIMIT_PER_HOUR`, default 20) because every analysis spends Gnani credits. The Claude layer stays off unless `ANTHROPIC_API_KEY` is set on the classifier service.
 
 ## Measured accuracy

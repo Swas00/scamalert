@@ -25,7 +25,8 @@ services:
       - key: MONGODB_URI
         sync: false
       - key: CLASSIFIER_URL
-        sync: false   # e.g. https://scamalert-classifier.onrender.com
+        sync: false   # use the classifier's INTERNAL address (service page > Connect > Internal), e.g. http://scamalert-classifier:10000.
+                      # The public https address can be bot-challenged by Render's edge when called server-to-server.
       - key: FRONTEND_ORIGIN
         sync: false   # e.g. https://your-app.vercel.app
       - key: RATE_LIMIT_PER_HOUR
