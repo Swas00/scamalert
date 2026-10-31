@@ -11,3 +11,5 @@ samples
 .vscode
 **/dist
 classifier/tests
+**/.pytest_cache
+classifier/requirements-dev.txt
