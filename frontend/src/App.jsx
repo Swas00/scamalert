@@ -9,8 +9,9 @@ import { useI18n } from "./lib/i18n.jsx";
 import { detectionFor } from "./lib/samples.js";
 import DataRain from "@/components/ui/data-rain";
 
-// Empty in local dev (Vite proxies /api); set VITE_API_URL to the deployed backend in production.
-const API = import.meta.env.VITE_API_URL || "";
+// Local dev: empty, so requests go to the Vite proxy (/api). Production builds default to the deployed backend; set VITE_API_URL to override it.
+const DEFAULT_API = "https://scamalert-1-backend.onrender.com";
+const API = (import.meta.env.VITE_API_URL || (import.meta.env.PROD ? DEFAULT_API : "")).replace(/\/+$/, "");
 
 export default function App() {
   const { t } = useI18n();
