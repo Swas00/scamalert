@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Header from "./components/Header.jsx";
 import InputPanel from "./components/InputPanel.jsx";
 import Report from "./components/Report.jsx";
@@ -23,8 +23,23 @@ export default function App() {
   const waited = useElapsed(loading);
   const reportRef = useRef(null);
 
-  // Free hosting sleeps when idle: ping the backend on load so it (and the classifier behind it) is awake by the time the user analyzes.
-  useEffect(() => { fetch(`${API}/api/health`).catch(() => {}); }, []);
+  // Probe the backend. This doubles as the wake-up ping for free hosting that sleeps when idle (so the backend and the classifier
+  // behind it are awake by the time someone analyzes). A slow answer is a cold start, not an outage; only a refusal or error counts as offline.
+  const [serviceDown, setServiceDown] = useState(false);
+  const checkService = useCallback(async () => {
+    const pending = fetch(`${API}/api/health`);
+    const outcome = await Promise.race([
+      pending.then((r) => (r.ok ? "up" : "down"), () => "down"),
+      new Promise((resolve) => setTimeout(() => resolve("slow"), 20000)),
+    ]);
+    if (outcome === "slow") pending.then((r) => setServiceDown(!r.ok), () => setServiceDown(true)); // settle whenever it finally answers
+    else setServiceDown(outcome === "down");
+  }, []);
+  useEffect(() => {
+    checkService();
+    window.addEventListener("focus", checkService);
+    return () => window.removeEventListener("focus", checkService);
+  }, [checkService]);
 
   // On narrow screens the report sits below the form; bring it into view when analysis starts or finishes.
   useEffect(() => {
@@ -43,7 +58,9 @@ export default function App() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(res.status === 429 ? "err.limit" : "err.generic");
       setResult({ ...data, synthetic: !!sample, detection: detectionFor(lang) });
+      setServiceDown(false);
     } catch (e) {
+      if (e instanceof TypeError) setServiceDown(true);
       setError(e instanceof TypeError ? "err.net" : e.message);
     } finally {
       setLoading(false);
@@ -56,6 +73,16 @@ export default function App() {
     <div className="relative z-10 mx-auto max-w-[70rem] px-4 pb-16 pt-6 sm:px-8 sm:pt-8">
       <a href="#results" className="skip-link">{t("skip")}</a>
       <Header />
+
+      {serviceDown && (
+        <div role="status" className="panel mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-l-2 !border-l-warn">
+          <div className="min-w-0">
+            <p className="font-medium text-warn">{t("offline.title")}</p>
+            <p className="mt-1 max-w-[60ch] text-[0.9375rem] text-ink-2">{t("offline.body")}</p>
+          </div>
+          <button type="button" className="btn btn-ghost" onClick={checkService}>{t("offline.retry")}</button>
+        </div>
+      )}
 
       <main className="mt-10 grid gap-x-10 gap-y-10 lg:grid-cols-12 lg:mt-14">
         <div className="min-w-0 lg:col-span-5">
