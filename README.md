@@ -46,6 +46,20 @@ cd classifier && pip install -r requirements-dev.txt && python -m pytest
 ```
 Sample scam/safe transcripts (English, Hinglish, Hindi) live in `classifier/tests/samples.json`.
 
+## Hosting the API without depending on one provider
+The repo root has a `Dockerfile` that runs the **whole API in one container**: the Node backend (public) and the Python classifier
+(loopback only, started first by `deploy/start.sh`). One free instance instead of two; either process dying restarts the whole service.
+Python dependencies are installed from `classifier/requirements.lock` (the exact versions the tests passed with).
+
+**Option A: Hugging Face Spaces (free, no card)**
+1. Create a Space at https://huggingface.co/new-space: SDK **Docker**, template **Blank**.
+2. Space **Settings → Variables and secrets**: add `GNANI_API_KEY` and `FRONTEND_ORIGIN` (`https://scamalert-tau.vercel.app`); optionally `MONGODB_URI` and `RATE_LIMIT_PER_HOUR`.
+3. From this repo run `deploy/push-to-hf.sh https://huggingface.co/spaces/<user>/<space>` (Git asks for your username and a **write** access token as the password).
+4. When the Space shows *Running*, open `https://<user>-<space>.hf.space/api/health`, then set `VITE_API_URL` to that address in Vercel and redeploy the frontend.
+
+**Option B: Render (Docker runtime)**: New → Web Service → connect this repo → Language **Docker** → add the same environment variables.
+`INTERNAL_TOKEN` is not needed in the single-container setup, because the classifier is not reachable from outside the container.
+
 ## Deployment (Vercel + Render + MongoDB Atlas)
 1. **MongoDB Atlas:** create a free M0 cluster, a database user, and allow access from anywhere (Render IPs change). Copy the connection string as `MONGODB_URI`.
 2. **Render:** New -> Blueprint, point at this repo (`render.yaml` defines `scamalert-classifier` and `scamalert-backend`). Enter the secrets Render asks for: `GNANI_API_KEY` on both, `MONGODB_URI`, `CLASSIFIER_URL` (the classifier's public URL), and later `FRONTEND_ORIGIN`.
