@@ -28,12 +28,13 @@ export default function App() {
   // behind it are awake by the time someone analyzes). A slow answer is a cold start, not an outage; only a refusal or error counts as offline.
   const [serviceDown, setServiceDown] = useState(false);
   const checkService = useCallback(async () => {
-    const pending = fetch(`${API}/api/health`);
-    const outcome = await Promise.race([
-      pending.then((r) => (r.ok ? "up" : "down"), () => "down"),
-      new Promise((resolve) => setTimeout(() => resolve("slow"), 20000)),
-    ]);
-    if (outcome === "slow") pending.then((r) => setServiceDown(!r.ok), () => setServiceDown(true)); // settle whenever it finally answers
+    // "Up" means a genuine JSON answer {"status":"ok"} - not merely an HTTP 200, which a misconfigured address or a catch-all page can also return.
+    const probe = fetch(`${API}/api/health`).then(
+      async (r) => { try { return r.ok && (await r.json())?.status === "ok" ? "up" : "down"; } catch { return "down"; } },
+      () => "down",
+    );
+    const outcome = await Promise.race([probe, new Promise((resolve) => setTimeout(() => resolve("slow"), 20000))]);
+    if (outcome === "slow") probe.then((o) => setServiceDown(o === "down")); // settle whenever it finally answers
     else setServiceDown(outcome === "down");
   }, []);
   useEffect(() => {
