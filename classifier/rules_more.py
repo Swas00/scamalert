@@ -235,3 +235,139 @@ DAMPENER_PATTERNS += [
     (r"(?:i|maine|मैंने).{0,15}(?:paid|pay kiya|bhar diya|भर दिया|checked|dekha|देखा).{0,25}(?:bill|बिल)", 20),
     (r"(?:this is a|ye ek|यह एक).{0,10}(?:reminder|appointment|confirmation|रिमाइंडर|अपॉइंटमेंट).{0,25}(?:dentist|doctor|clinic|class|school|डॉक्टर|क्लिनिक)", 25),
 ]
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Second pass, from public reports of how these calls actually run (news and advisories read 2026-11-01):
+# digital-arrest call sequences (TRAI claim -> "number linked to illegal activity" -> statement over a WhatsApp/Skype video
+# call -> Aadhaar details -> "how many bank accounts / do you use UPI" -> transfer to a "safe account", with a promised
+# refund and clearance certificate); APK-file lures (wedding card, e-challan, "life certificate"); pensioner and
+# KYC-executive calls; prepaid-task job scams ("send 1000, get 1300"); mule recruitment; and the US-style
+# government, tech-support, gift-card and grandparent scripts that also reach Indian numbers.
+# ---------------------------------------------------------------------------------------------------------------
+add_phrases("fake_authority", "Government or police impersonation", [
+    ("linked to illegal activity", 40), ("used for illegal activities", 40), ("number will be blocked within", 35),
+    ("mobile number is linked", 30), ("whatsapp video call", 12), ("give your statement", 25), ("record your statement", 25),
+    ("how many bank accounts", 40), ("do you use upi", 30), ("do you use net banking", 30), ("senior officer will", 25),
+    ("until the verification is complete", 35), ("will be returned after verification", 40), ("clearance certificate", 35),
+    ("funds will be returned", 35), ("your money will be refunded after", 40), ("headquarters", 8), ("your aadhaar is linked to", 35),
+    ("your aadhaar has been used", 35), ("aadhaar number to verify", 25), ("mumbai police", 15), ("delhi police", 12),
+    ("cyber crime branch", 25), ("trai officer", 30), ("trai se bol", 35), ("mobile number illegal", 35),
+    ("aapke number se illegal", 40), ("aapka number band kar diya jayega", 40), ("kitne bank account hain", 40),
+    ("upi use karte hain", 25), ("paise rbi ke account mein", 40), ("jaanch ke baad wapas", 40),
+    ("आपका नंबर अवैध गतिविधि", 40), ("आपके नंबर से अवैध", 40), ("ट्राई से बोल", 35), ("कितने बैंक अकाउंट", 40),
+    ("यूपीआई इस्तेमाल करते", 25), ("जांच के बाद वापस", 40), ("आरबीआई के खाते में", 40), ("वीडियो कॉल पर बयान", 30),
+    ("आपका आधार नंबर अवैध", 35), ("आपके आधार से", 15), ("आपका सिम अवैध", 40),
+])
+add_phrases("remote_access_scam", "Remote-access / tech-support scam", [
+    ("apk file", 35), (".apk", 35), ("download the apk", 45), ("install this apk", 45), ("install the file", 25),
+    ("e-challan", 18), ("echallan", 18), ("traffic challan", 15), ("pending challan", 25), ("rto challan", 25),
+    ("wedding invitation", 12), ("shaadi ka card", 12), ("invitation card app", 30), ("apk bheji", 40), ("apk file bhej", 40),
+    ("apk download karo", 45), ("file install karo", 30), ("link se app install", 35),
+    ("एपीके फाइल", 40), ("एपीके डाउनलोड", 45), ("चालान", 12), ("ई-चालान", 18), ("फाइल इंस्टॉल करें", 30), ("फाइल इंस्टॉल करो", 30),
+    ("शादी का कार्ड", 12), ("इनविटेशन ऐप", 30),
+])
+add_phrases("insurance_tax_scam", "Fake insurance / tax-refund call", [
+    ("jeevan pramaan", 30), ("jeevan praman", 30), ("life certificate", 25), ("pension department", 25), ("ppo number", 35),
+    ("date of retirement", 18), ("pension will stop", 40), ("pension band ho", 40), ("pension rok", 35), ("life certificate update", 40),
+    ("पेंशन बंद हो", 40), ("पेंशन रुक", 35), ("लाइफ सर्टिफिकेट", 25), ("जीवन प्रमाण", 30), ("पीपीओ नंबर", 35), ("पेंशन विभाग", 25),
+    ("social security number", 30), ("social security has been suspended", 45), ("your social security", 25), ("medicare card", 25),
+    ("irs", 12), ("internal revenue", 25), ("back taxes", 35), ("tax lien", 35), ("owe back taxes", 40),
+])
+add_phrases("job_task_scam", "Fake job / task scam", [
+    ("prepaid task", 45), ("prepaid tasks", 45), ("advance task", 30), ("merchant task", 35), ("send 1000", 25), ("you will receive 1300", 45),
+    ("earn commission", 20), ("submit the screenshot", 25), ("screenshot of the task", 30), ("unlock the next task", 40), ("withdraw your earnings", 30),
+    ("your salary will be", 8), ("hiring for", 8), ("simple online tasks", 35), ("no interview", 25), ("work from mobile", 20),
+    ("prepaid task karo", 45), ("pehle paise bhejo", 35), ("screenshot bhejo", 25), ("agla task unlock", 40), ("commission milega", 25),
+    ("प्रीपेड टास्क", 45), ("अगला टास्क", 25), ("स्क्रीनशॉट भेजो", 25), ("कमीशन मिलेगा", 25), ("बिना इंटरव्यू", 25), ("मोबाइल से कमाएं", 22),
+])
+add_phrases("money_mule_scam", "Money-mule recruitment", [
+    ("rent your bank account", 40), ("lend your bank account", 45), ("lend your account", 40), ("use your account for", 25),
+    ("commission for your account", 40), ("commission of", 12), ("use your account for transfers", 35), ("receive money in your account", 30),
+    ("account rent par", 40), ("apna account do", 35), ("account kiraye par", 40), ("apna account kiraye", 40),
+    ("अकाउंट किराए पर", 40), ("अपना अकाउंट दो", 35), ("अपना खाता किराए", 40),
+])
+add_phrases("relative_impersonation", "Relative impersonation", [
+    ("gift card", 20), ("gift cards", 20), ("google play card", 30), ("itunes card", 30), ("bitcoin atm", 20), ("wire the money", 25),
+    ("do you know who this is", 40), ("guess who", 30), ("i'm in jail", 40), ("i need bail", 45), ("bail money", 40), ("don't tell mom", 30),
+    ("don't tell my parents", 35), ("please don't tell anyone", 30),
+])
+add_phrases("remote_access_scam", "Remote-access / tech-support scam", [
+    ("lost iphone", 18), ("your lost iphone", 30), ("iphone has been found", 40),
+])
+add_phrases("fake_kyc_update", "Fake KYC update", [
+    ("kyc executive", 35), ("call this number to update", 40), ("kyc documents are incomplete", 35), ("kyc documents are pending", 35),
+    ("sim kyc", 25), ("jio kyc", 25), ("airtel kyc", 25), ("bsnl kyc", 25), ("kyc suspension", 30), ("kyc expired", 30),
+    ("pan will be deactivated", 40), ("pan card will be blocked", 40), ("aadhaar will be deactivated", 40), ("aadhaar will be blocked", 40),
+    ("pan inoperative", 35), ("pan aadhaar not linked", 35), ("kyc executive se baat", 35), ("is number par call karo", 30),
+    ("पैन निष्क्रिय", 35), ("पैन ब्लॉक हो", 40), ("आधार ब्लॉक हो", 40), ("केवाईसी एग्जीक्यूटिव", 35), ("इस नंबर पर कॉल करें", 30),
+])
+add_phrases("fake_bank_officer", "Fake bank officer", [
+    ("verify certain transactions", 40), ("verify some transactions", 40), ("verify a transaction", 30), ("did you make a transaction", 30),
+    ("transaction of rs", 15), ("transaction of ₹", 15), ("press 1", 22), ("press one", 22), ("press 9", 22), ("toll free number", 8),
+    ("customer care executive", 25), ("customer care number", 15), ("customer care", 8), ("aapke account se transaction", 30),
+    ("transaction confirm karne", 30), ("1 dabaiye", 25), ("1 dabayen", 25), ("एक दबाएं", 25), ("1 दबाएं", 25), ("1 दबाइए", 25),
+    ("आपके खाते से ट्रांजैक्शन", 30), ("ट्रांजैक्शन कन्फर्म", 30), ("कस्टमर केयर एग्जीक्यूटिव", 25),
+])
+
+CATEGORY_PATTERNS["fake_authority"] += [
+    (r"(?:number|sim|mobile|नंबर|सिम).{0,30}(?:linked|used|involved|connected|जुड़ा|इस्तेमाल|शामिल).{0,25}(?:illegal|crime|fraud|money laundering|harass|अवैध|अपराध|धोखाधड़ी)", 40),
+    (r"(?:will be|ho jayega|जाएगा|होगा).{0,8}blocked.{0,15}(?:within|in|next|के अंदर|ghante|hours?)|(?:within|next).{0,10}(?:2|two|24|\d+) hours.{0,25}(?:block|disconnect|suspend)", 30),
+    (r"(?:how many|kitne|कितने).{0,15}(?:bank )?(?:accounts?|खाते|अकाउंट).{0,25}(?:do you have|hain|हैं|aapke|आपके|you have)", 40),
+    (r"(?:money|funds|paise|पैसे|रकम).{0,40}(?:returned|refunded|wapas|वापस).{0,25}(?:after|once|baad|बाद).{0,20}(?:verification|investigation|inquiry|jaanch|जांच|सत्यापन)", 40),
+    (r"(?:send|share|upload|show|bhejo|dikhao|भेजो|दिखाओ).{0,15}(?:your )?(?:aadhaar|aadhar|id proof|आधार).{0,25}(?:to verify|for verification|verify|सत्यापन|verification)", 25),
+    (r"(?:pay|transfer|deposit).{0,20}(?:bail|fine|penalty|settlement|security deposit).{0,20}(?:avoid|to avoid|otherwise|or you)", 40),
+]
+CATEGORY_PATTERNS["remote_access_scam"] += [
+    (r"(?:download|install|open|click).{0,25}(?:the |this )?(?:apk|file|app).{0,40}(?:sent|send|i sent|whatsapp|link|bheji|भेजी|चालान|challan|invitation|कार्ड)", 40),
+    (r"(?:challan|चालान).{0,40}(?:apk|download|install|app|डाउनलोड|ऐप)", 40),
+]
+CATEGORY_PATTERNS["insurance_tax_scam"] += [
+    (r"(?:pension|पेंशन).{0,40}(?:will stop|stopped|suspend|band|बंद|रुक).{0,40}(?:unless|until|if|verify|update|otp|जब तक|अपडेट)", 40),
+    (r"(?:life certificate|jeevan pram[a]?an|जीवन प्रमाण|लाइफ सर्टिफिकेट).{0,40}(?:otp|link|app|video call|ऐप|लिंक|ओटीपी|वीडियो कॉल)", 40),
+    (r"(?:your|aapka|आपका).{0,10}(?:social security|ssn).{0,30}(?:suspend|compromis|blocked|linked to|used)", 45),
+]
+CATEGORY_PATTERNS["job_task_scam"] += [
+    (r"(?:send|pay|deposit|bhejo|भेजो).{0,15}(?:₹|rs\.?|rupees|\$)?\s?\d{3,5}.{0,30}(?:receive|get|milega|मिलेगा|return|back).{0,15}(?:₹|rs\.?|rupees|\$)?\s?\d{3,6}", 45),
+    (r"(?:pay|deposit|bhar|भरो).{0,20}(?:first|pehle|पहले).{0,30}(?:then|baad|बाद).{0,20}(?:earn|task|salary|kamao|कमा)", 35),
+]
+_GIFT = (r"(?:buy|purchase|get|kharid|खरीद).{0,20}(?:gift ?cards?|google play|itunes|steam|apple card|गिफ्ट कार्ड).{0,40}(?:read|send|scratch|share|code|कोड|बताओ|भेजो|number)", 45)
+CATEGORY_PATTERNS["relative_impersonation"] += [
+    _GIFT,
+    (r"(?:hi|hello|hey)\s*(?:grandma|grandpa|nani|nana|dadi|dada|दादी|नानी)", 15),
+    (r"(?:i|main|मैं).{0,12}(?:am in|am at|hoon|हूं).{0,15}(?:jail|police station|custody|lockup|जेल|थाने|हवालात).{0,40}(?:bail|lawyer|money|paise|पैसे|वकील|जमानत)", 45),
+]
+CATEGORY_PATTERNS["fake_authority"].append(_GIFT)
+CATEGORY_PATTERNS.setdefault("money_mule_scam", []).append(
+    (r"(?:your|aapka|आपका|apna|अपना).{0,15}(?:account|bank account|खाता).{0,25}(?:rent|lend|kiraye|किराए|use|इस्तेमाल).{0,25}(?:commission|per month|paisa|कमीशन|हर महीने)|(?:lend|rent|kiraye).{0,12}(?:your|apna).{0,12}(?:bank )?(?:account|खाता).{0,40}(?:commission|per month|कमीशन)", 40))
+SIGNAL_PATTERNS["credential"] += [
+    (r"(?:otp|code|कोड|ओटीपी).{0,25}(?:to verify|for verification|to confirm|verify karne|वेरिफाई|सत्यापन)", 25),
+    (r"(?:ppo|pension|पीपीओ|पेंशन).{0,12}(?:number|no\.?|नंबर).{0,20}(?:batao|bataiye|share|tell|give|बताइए|बताओ)", 30),
+    (r"(?:date of birth|dob|जन्म ?तिथि|janam ?tithi).{0,25}(?:and|aur|और).{0,20}(?:aadhaar|pan|account|आधार|पैन)", 25),
+]
+SIGNAL_PATTERNS["secrecy"] += [
+    (r"(?:don'?t|do not|never|mat|मत).{0,12}(?:hang up|disconnect|cut the call|leave the (?:room|house)|leave the video|call mat|कॉल मत|कमरा न छोड़)", 25),
+    (r"(?:do not|don'?t|mat|मत).{0,10}(?:contact|call|talk to|speak to|baat|बात).{0,15}(?:anyone|family|lawyer|bank|kisi se|किसी से|परिवार|वकील)", 30),
+    (r"(?:this is|ye|यह).{0,8}(?:a )?(?:secret|confidential|gopniya|गोपनीय|top secret|national security)", 20),
+]
+SIGNAL_PATTERNS["threat"] += [
+    (r"(?:your|aapka|आपका).{0,15}(?:number|sim|account|aadhaar|pan|नंबर|खाता|आधार|पैन).{0,20}(?:will be|ho jayega|jayega|जाएगा|होगा).{0,12}(?:blocked|deactivated|cancelled|seized|frozen|band|बंद|ब्लॉक)", 25),
+    (r"(?:warrant|fir|एफआईआर|वारंट).{0,25}(?:issued|registered|jaari|जारी|दर्ज)", 25),
+    (r"(?:otherwise|or else|warna|वरना|nahi to|नहीं तो).{0,25}(?:arrest|jail|case|fine|giraftar|गिरफ्तार|जेल|केस)", 30),
+]
+SIGNAL_PATTERNS["urgency"] += [
+    (r"(?:right now|abhi|अभी|immediately|turant|तुरंत).{0,20}(?:or|warna|वरना|otherwise|nahi to|नहीं तो)", 12),
+    (r"(?:before|by|se pehle|से पहले).{0,12}(?:midnight|tonight|5 ?pm|end of (?:the )?day|aaj raat|आज रात|शाम)", 12),
+]
+SIGNAL_PATTERNS["payment_request"] += [
+    (r"(?:safe|secure|rbi|supervised|temporary|सुरक्षित|आरबीआई|अस्थायी).{0,12}(?:account|wallet|upi|खाते|अकाउंट)", 35),
+    (r"(?:transfer|send|move|deposit|ट्रांसफर|भेज|जमा).{0,20}(?:all|entire|whole|sab|saara|सारा|सारे|पूरा).{0,20}(?:money|amount|savings|funds|paise|पैसे|रकम|बचत)", 40),
+    (r"(?:bitcoin|crypto|usdt|btc|बिटकॉइन|क्रिप्टो).{0,25}(?:atm|wallet|address|deposit|transfer|pay|वॉलेट|जमा)", 35),
+    (r"(?:western union|moneygram|wire transfer|zelle|cash ?app|वायर ट्रांसफर)", 30),
+]
+COMBOS_EXTRA = None  # combos already cover urgency+credential, threat+credential, secrecy+payment, urgency+payment
+DAMPENERS += [
+    ("report it on 1930", 25), ("call 1930", 25), ("visit the nearest branch", 20), ("official website", 8), ("official app", 8),
+    ("never send apk", 30), ("never download apk", 30), ("do not install apk", 30), ("do not click on links", 25), ("don't click on links", 25),
+    ("एपीके फाइल कभी", 30), ("लिंक पर क्लिक न करें", 25), ("आधिकारिक वेबसाइट", 8), ("निकटतम शाखा", 20),
+]
