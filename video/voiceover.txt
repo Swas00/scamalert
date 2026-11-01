@@ -1,0 +1,25 @@
+SCAMALERT DEMO - VOICEOVER (read at a calm, clear pace; about 75 words, 45-50 seconds of speaking)
+Record this separately in a quiet room (phone voice memo is fine), then drop it onto the timeline.
+Timings are targets; adjust the pauses to match your screen recording.
+
+[0:00 - 0:06]  (no voiceover - the opening card; or say the line in your own voice)
+    "Sir, aapka KYC expire ho gaya hai. Abhi OTP batao."
+
+[0:06 - 0:14]  while the sample plays
+    "This is a scam call, with heavy phone-line noise added.
+     It's synthetic: no real calls or personal data are ever used."
+
+[0:14 - 0:24]  while the scan line runs
+    "Gnani Prisma transcribes it, even through all that noise."
+
+[0:24 - 0:38]  while the result is on screen
+    "ScamAlert doesn't just look for keywords.
+     It marks what the caller asks you to do: update KYC under threat, read out an OTP."
+
+[0:38 - 0:48]  (stay silent - let the Hindi warning play)
+
+[0:48 - 0:54]
+    "And a genuine bank notice stays clear."
+
+[0:54 - 1:00]  on the end card
+    "ScamAlert. Built solo on Gnani Prisma and Timbre."
