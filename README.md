@@ -82,7 +82,15 @@ Use synthetic or test audio only: no real calls, phone/account/Aadhaar/PAN numbe
 | English | yes | yes | yes |
 | Hindi / Hinglish | yes | yes | yes |
 | Kannada | yes | **beta** (weak on unseen wording, see `samples/RESULTS.md`) | yes |
-| Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi | yes | **no**: the transcript is shown without a verdict | no |
+| Tamil, Telugu, Bengali, Gujarati, Malayalam, Punjabi, Marathi | yes | **beta, unmeasured**: rules exist (see below) but have never been run on real Prisma output | no: the warning is spoken in English |
+| Odia and other languages | no (Prisma does not list them) | no | no |
+
+**Scam types the rules cover:** fake KYC, UPI/refund fraud, lottery/prize, fake bank officer, relative impersonation, police/government
+impersonation ("digital arrest", TRAI/SIM threats), fake job and "prepaid task" offers, investment/trading groups, fake loan offers,
+remote-access and APK-file lures, electricity/SIM disconnection threats, courier/customs parcels, insurance/pension/tax-refund calls,
+blackmail, and bank-account "rental" (money mules). The newer types were written from public news and advisory descriptions of how
+these calls run (not from recordings of real calls) and are tested only on author-written examples. The seven regional-language
+rule sets (`classifier/rules_regional.py`) have not been reviewed by native speakers.
 
 The interface is available in English and Hindi. Hindi and Kannada text has not been reviewed by a native speaker.
 
