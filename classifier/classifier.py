@@ -3,6 +3,7 @@ from functools import lru_cache
 
 import reasoner
 import rules_more  # noqa: F401  (extends the rule tables from rules.py)
+import rules_regional
 from rules import CATEGORIES, CATEGORY_PATTERNS, COMBOS, DAMPENER_PATTERNS, DAMPENERS, SIGNAL_PATTERNS, SIGNALS
 
 LOW_RISK = 30   # below this no scam category is reported
@@ -26,6 +27,7 @@ _SPACED_ACRONYMS = [
     (r"ಕೆ\s*ವೈ\s*ಸಿ", "ಕೆವೈಸಿ"), (r"[ಒಓ]\s*ಟಿ\s*ಪಿ", "ಒಟಿಪಿ"), (r"ಸಿ\s*ವಿ\s*ವಿ", "ಸಿವಿವಿ"),
     (r"ಕ್ಯೂ\s*ಆರ್", "ಕ್ಯೂಆರ್"), (r"ಯು\s*ಪಿ\s*ಐ", "ಯುಪಿಐ"), (r"ಎ\s*ಟಿ\s*ಎಂ", "ಎಟಿಎಂ"), (r"\bu\s*p\s*i\b", "upi"), (r"\bc\s*v\s*v\b", "cvv"),
 ]
+_SPACED_ACRONYMS += rules_regional.SPACED_ACRONYMS  # Tamil, Telugu, Bengali, ... letter-by-letter acronyms
 _PUNCT = re.compile(r"[,.;:!?\"“”‘()\[\]।|-]+")
 
 
