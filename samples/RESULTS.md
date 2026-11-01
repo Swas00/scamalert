@@ -78,3 +78,17 @@ done on `kannada3`. Because of this, the app tells the user so on Kannada result
 (Tamil, Telugu, Malayalam, Marathi, Bengali, Gujarati, Punjabi) it shows the transcript without any verdict.
 
 The repo keeps these sets so the numbers can be re-run: `classifier/venv/bin/python samples/measure.py kannada3`.
+
+## 5. Wider rules, 2026-11-01 (what was and was not measured)
+Added: nine more scam types, extra wording for the original six, request patterns drawn from public reports of how the calls run
+(digital-arrest sequences, APK lures, prepaid-task jobs, pension and KYC-executive calls, gift-card and "safe account" demands), and
+beta rules for Tamil, Telugu, Bengali, Gujarati, Malayalam, Punjabi and Marathi.
+
+- **Re-scoring every cached Prisma transcript** (in-sample, v1, v2, Kannada v1-v3; clean, noisy, harsh) with the new rules: the numbers in
+  sections 2 and 3 are unchanged, except v1 under harsh noise, which went from 3/6 to 4/6 detected. v1 is already contaminated by earlier
+  tuning. No new false alarms on any safe call. (A first version of this change lost two detections because new patterns replaced the
+  tuned ones instead of extending them; the before/after comparison caught it and it was fixed in a separate commit.)
+- **The new scam types and the regional languages are NOT measured.** Their tests (`classifier/tests/test_more_scams.py`,
+  `test_regional.py`) use text written by the same author as the rules, so they prove the rules fire on the intended wording, not that
+  they catch real calls. No audio exists for these (Timbre has no voices for the regional languages, and no real calls are used).
+- Honest expectation: coverage of the *kind* of call has widened, but unseen wording will still slip through, as the held-out sets showed.
