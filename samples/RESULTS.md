@@ -92,3 +92,26 @@ beta rules for Tamil, Telugu, Bengali, Gujarati, Malayalam, Punjabi and Marathi.
   `test_regional.py`) use text written by the same author as the rules, so they prove the rules fire on the intended wording, not that
   they catch real calls. No audio exists for these (Timbre has no voices for the regional languages, and no real calls are used).
 - Honest expectation: coverage of the *kind* of call has widened, but unseen wording will still slip through, as the held-out sets showed.
+
+## 6. Independent public corpus, 2026-11-01 (BothBosu/scam-dialogue, Apache-2.0)
+1,600 English call dialogues written by an LLM (800 scams: ssn, refund, support, reward; 800 legitimate: delivery, insurance,
+telemarketing, wrong number). Not real calls, no personal data; downloaded at run time (`samples/eval_external.py`), not stored here.
+This is the first test set the author of the rules did not write. Text only (no audio), so it measures the rules, not Prisma.
+
+| Rules | Scams that warn (>= 30) | Legitimate calls falsely warned |
+|---|---|---|
+| Before this pass (whole corpus) | 699 / 800 (87.4%) | 32 / 800 (4.0%) |
+| After this pass, TRAIN split (tuned on) | 632 / 640 (98.8%) | 28 / 640 (4.4%) |
+| After this pass, **TEST split (scored once)** | **158 / 160 (98.8%)** | **4 / 160 (2.5%)** |
+
+Gaps this exposed and fixed: "we overcharged you, give us your bank account and routing number" refund calls (75% caught before),
+and unsolicited "your computer is infected, let us remote in" support calls (76% caught before). The first attempt at the fix
+raised false alarms on ordinary marketing ("limited time", a price "plus tax"); those patterns were narrowed.
+
+Read these numbers carefully:
+- The test split comes from the same LLM and prompt templates as the train split, so it contains near-paraphrases of the training
+  dialogues. It is optimistic. Real callers vary far more than 1,600 template-generated dialogues.
+- Several "legitimate" delivery calls in the corpus ask for a credit-card number. A real courier would not, so some of the 28-32
+  false alarms are arguably label noise; they were deliberately NOT tuned away.
+- US-style English only. It says nothing about Hindi, Hinglish or the regional languages (still unmeasured), or about real speech.
+- Earlier audio sets (section 2) re-scored identically after this pass.
