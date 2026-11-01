@@ -11,7 +11,7 @@ export const LANG_CODES = ["en-IN", "hi-IN", "ta-IN", "te-IN", "kn-IN", "ml-IN",
 export const DETECTION = { "en-IN": "full", "hi-IN": "full", "kn-IN": "beta" };
 export const detectionFor = (code) => DETECTION[code] || "none";
 
-export const MAX_SECONDS = 60; // Gnani Prisma REST limit
+export const MAX_SECONDS = 30; // Gnani Prisma STT rejects audio over 30 s (MAX_AUDIO_DURATION_EXCEEDED)
 
 export function levelOf(score) {
   if (score >= 70) return { key: "high", cls: "text-danger", mark: "var(--danger-mark)", bar: "var(--danger)" };
