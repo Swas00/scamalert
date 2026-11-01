@@ -16,6 +16,7 @@ WARNINGS = {
         "insurance_tax_scam": "Warning. This looks like a fake insurance, pension or tax refund call. Never share an OTP or pay a fee to receive a refund or bonus.",
         "romance_sextortion_scam": "Warning. This looks like blackmail. Do not pay. Save the evidence, stop replying, and report it on 1930 or cybercrime.gov.in.",
         "money_mule_scam": "Warning. This looks like a request to rent out your bank account. Doing so can make you part of a crime. Say no and hang up.",
+        "fake_refund_scam": "Warning. This looks like a fake refund scam. A real company never needs your bank account or routing number to refund you. Hang up and contact the company on its official number.",
         "default": "Warning. This call shows signs of a scam. Do not share personal or financial details.",
     },
     "hi-IN": {
@@ -34,6 +35,7 @@ WARNINGS = {
         "insurance_tax_scam": "सावधान! यह फर्जी बीमा, पेंशन या टैक्स रिफंड कॉल लगती है। रिफंड या बोनस पाने के लिए कभी ओटीपी न बताएं और न फीस दें।",
         "romance_sextortion_scam": "सावधान! यह ब्लैकमेल लगता है। पैसे न दें। सबूत सुरक्षित रखें, जवाब देना बंद करें और 1930 या cybercrime.gov.in पर शिकायत करें।",
         "money_mule_scam": "सावधान! यह आपका बैंक खाता किराए पर मांगने की कोशिश लगती है। ऐसा करने से आप अपराध में फंस सकते हैं। मना करें और फोन काट दें।",
+        "fake_refund_scam": "सावधान! यह फर्जी रिफंड का घोटाला लगता है। असली कंपनी रिफंड के लिए आपके बैंक खाते की जानकारी नहीं मांगती। फोन काटकर कंपनी के आधिकारिक नंबर पर संपर्क करें।",
         "default": "सावधान! इस कॉल में धोखाधड़ी के संकेत हैं। अपनी निजी या वित्तीय जानकारी साझा न करें।",
     },
     "kn-IN": {
