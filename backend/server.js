@@ -27,7 +27,7 @@ const analyzeLimiter = rateLimit({
   legacyHeaders: false,
   message: { error: "Too many analyses from this address. Please try again later." },
 });
-// STT accepts <= 60 s of audio, which fits well within 8 MB
+// STT accepts <= 30 s of audio, which fits well within 8 MB
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 8 * 1024 * 1024 } });
 
 // Free hosting puts idle services to sleep. Opening the site pings this endpoint, which also wakes the classifier
@@ -128,7 +128,7 @@ app.post("/api/analyze", analyzeLimiter, upload.single("audio"), async (req, res
 });
 
 app.use((err, _req, res, _next) => {
-  if (err.code === "LIMIT_FILE_SIZE") return res.status(413).json({ error: "Audio file too large (max 8 MB, 60 seconds)." });
+  if (err.code === "LIMIT_FILE_SIZE") return res.status(413).json({ error: "Audio file too large (max 8 MB, 30 seconds)." });
   console.error(err);
   res.status(500).json({ error: "Server error" });
 });
