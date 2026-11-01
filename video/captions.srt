@@ -1,0 +1,27 @@
+1
+00:00:00,000 --> 00:00:05,500
+Sound familiar?
+
+2
+00:00:06,000 --> 00:00:13,500
+A synthetic scam call, with heavy phone-line noise added. No real calls are ever used.
+
+3
+00:00:14,000 --> 00:00:23,500
+Gnani Prisma transcribes it, even through heavy noise.
+
+4
+00:00:24,000 --> 00:00:37,500
+ScamAlert marks what the caller asks you to do: update KYC under threat, read out an OTP.
+
+5
+00:00:38,000 --> 00:00:47,500
+Spoken warning in Hindi, voiced by Gnani Timbre: "This looks like a fake KYC scam. Banks never ask you to update KYC over the phone. Don't share any details. Hang up."
+
+6
+00:00:48,000 --> 00:00:53,500
+A genuine bank notice stays clear: no scam signs found.
+
+7
+00:00:54,000 --> 00:01:00,000
+ScamAlert. Built solo on Gnani AI Prisma and Timbre.
