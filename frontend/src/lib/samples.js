@@ -8,7 +8,11 @@ export const SAMPLES = [
 export const LANG_CODES = ["en-IN", "hi-IN", "ta-IN", "te-IN", "kn-IN", "ml-IN", "mr-IN", "bn-IN", "gu-IN", "pa-IN"];
 
 // How well scam detection works for the language the user says is spoken. "none" = no rules exist, so no verdict is shown.
-export const DETECTION = { "en-IN": "full", "hi-IN": "full", "kn-IN": "beta" };
+export const DETECTION = {
+  "en-IN": "full", "hi-IN": "full",
+  // Beta = rules exist but have not been measured on real transcripts (see samples/RESULTS.md).
+  "kn-IN": "beta", "ta-IN": "beta", "te-IN": "beta", "bn-IN": "beta", "gu-IN": "beta", "ml-IN": "beta", "pa-IN": "beta", "mr-IN": "beta",
+};
 export const detectionFor = (code) => DETECTION[code] || "none";
 
 export const MAX_SECONDS = 30; // Gnani Prisma STT rejects audio over 30 s (MAX_AUDIO_DURATION_EXCEEDED)
