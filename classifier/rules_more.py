@@ -359,7 +359,7 @@ SIGNAL_PATTERNS["threat"] += [
 ]
 SIGNAL_PATTERNS["urgency"] += [
     (r"(?:right now|abhi|अभी|immediately|turant|तुरंत).{0,20}(?:or|warna|वरना|otherwise|nahi to|नहीं तो)", 12),
-    (r"(?:before|by|se pehle|से पहले).{0,12}(?:midnight|tonight|5 ?pm|end of (?:the )?day|aaj raat|आज रात|शाम)", 12),
+    (r"(?:before|by|se pehle|से पहले).{0,12}(?:midnight|tonight|aaj raat|आज रात)", 12),
 ]
 SIGNAL_PATTERNS["payment_request"] += [
     (r"(?:safe|secure|rbi|supervised|temporary|सुरक्षित|आरबीआई|अस्थायी).{0,12}(?:account|wallet|upi|खाते|अकाउंट)", 35),
@@ -372,4 +372,53 @@ DAMPENERS += [
     ("report it on 1930", 25), ("call 1930", 25), ("visit the nearest branch", 20), ("official website", 8), ("official app", 8),
     ("never send apk", 30), ("never download apk", 30), ("do not install apk", 30), ("do not click on links", 25), ("don't click on links", 25),
     ("एपीके फाइल कभी", 30), ("लिंक पर क्लिक न करें", 25), ("आधिकारिक वेबसाइट", 8), ("निकटतम शाखा", 20),
+]
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Third pass: gaps found by scoring an independent public corpus, BothBosu/scam-dialogue (Apache-2.0, 1,600 LLM-written
+# English call dialogues; nothing real). Tuned on its TRAIN split only; the TEST split was scored once, afterwards.
+# Gaps: "refund/overcharge, give us your bank account and routing number", and unsolicited "your computer is infected,
+# let us remote in" support calls. Generic English; the same shapes recur in Hinglish calls.
+# ---------------------------------------------------------------------------------------------------------------
+add_phrases("fake_refund_scam", "Fake refund / overcharge call", [
+    ("you were overcharged", 25), ("you've been overcharged", 25), ("been overcharged", 22), ("overcharged on your", 25), ("refund department", 30),
+    ("eligible for a refund", 30), ("you're eligible for a refund", 30), ("refund of $", 18), ("process the refund", 22), ("issue a refund", 15),
+    ("deposit the refund", 30), ("refund directly into your account", 35), ("direct deposit", 12), ("charged your credit card twice", 30),
+    ("duplicate charge", 22), ("refund the difference", 25), ("customer appreciation program", 30), ("one-time courtesy", 25),
+    ("galti se zyada charge", 25), ("zyada paise kat gaye", 25), ("refund ke liye bank details", 40), ("अधिक चार्ज", 22), ("रिफंड के लिए बैंक", 40),
+])
+CATEGORY_PATTERNS.setdefault("fake_refund_scam", []).extend([
+    (r"(?:overcharg|charged (?:twice|double)|duplicate charge|error in your (?:recent )?(?:transaction|purchase|order)).{0,160}(?:refund|reimburs)", 30),
+    (r"(?:refund|reimburs).{0,120}(?:bank account|routing number|account (?:number|details|information)|direct(?:ly)? (?:into|to) your (?:bank )?account)", 35),
+])
+add_phrases("remote_access_scam", "Remote-access / tech-support scam", [
+    ("infected with a virus", 35), ("infected with malware", 35), ("been infected", 22), ("has a virus", 25), ("virus on your computer", 35),
+    ("malware on your computer", 35), ("remote into your computer", 45), ("remotely access your computer", 45), ("remote access to your computer", 45),
+    ("remote in to your computer", 45), ("remote into", 25), ("windows technical support", 30), ("microsoft technical support", 30),
+    ("windows support", 22), ("suspicious activity coming from your ip", 35), ("your ip address", 8), ("run a few scans", 15),
+    ("download this software", 25), ("download the software so", 30), ("let me guide you through", 12), ("your computer is at risk", 30),
+])
+SIGNAL_PATTERNS["credential"] += [
+    (r"(?:provide|give|tell|confirm|verify|share|send|need|require|read|read out|enter)\b.{0,45}\b(?:bank account (?:number|details|information|info)|routing number|account (?:and|&) routing|account number and)", 32),
+    (r"(?:bank account (?:number|details|information)|routing number).{0,40}(?:verify|process|deposit|refund|confirm|to receive|so (?:we|i) can)", 28),
+    (r"(?:social security(?: number)?|ssn).{0,40}(?:verify|confirm|provide|give|tell|last (?:four|4)|read)|(?:verify|confirm|provide|give|tell|read).{0,30}(?:social security(?: number)?|ssn)", 30),
+    (r"(?:email|e-mail) (?:address )?and (?:password|login)|(?:log ?in|sign ?in) (?:details|credentials)|(?:username|user name) and password", 30),
+]
+SIGNAL_PATTERNS["payment_request"] += [
+    (r"(?:pay|send|deposit|wire|transfer)\b.{0,30}\b(?:\$|usd|dollars?)\s?\d+|(?:\$|usd)\s?\d[\d,]*.{0,30}\b(?:fee|fees|deposit|processing fee|clearance|release fee)", 25),
+    (r"(?:fee|fees|tax|charges?|shipping|handling|processing).{0,40}(?:to (?:claim|receive|release|collect)|before (?:you|we|your))", 28),
+    (r"(?:payment|pay).{0,25}(?:by|with|via|using|through).{0,10}(?:gift ?cards?|prepaid card|wire|western union|bitcoin|crypto|cash ?app|zelle)", 40),
+]
+SIGNAL_PATTERNS["urgency"] += [
+    (r"(?:you must|you need to|you have to).{0,20}(?:immediately|right now|right away|today|within)", 12),
+]
+SIGNAL_PATTERNS["secrecy"] += [
+    (r"(?:this is|it'?s).{0,10}(?:a )?(?:one[- ]time|exclusive|special).{0,12}(?:offer|program|courtesy|opportunity).{0,40}(?:only|select|chosen|contact directly)", 15),
+    (r"(?:only available to|exclusive to|select customers).{0,30}(?:contact|chosen|selected|directly)", 12),
+]
+
+# A company saying what it will NOT ask for is reassurance, not a request.
+DAMPENER_PATTERNS += [
+    (r"(?:don'?t|do not|never|won'?t|will not|would never|not going to|no need to)\b.{0,30}(?:ask|provide|give|share|need).{0,40}(?:bank account|social security|ssn|credit card|card number|password|pin)", 45),
 ]

@@ -58,6 +58,17 @@ SAFE = {
 }
 
 EXPECTED = {'trai_en': 'fake_authority', 'arrest_en2': 'fake_authority', 'trai_hi': 'fake_authority', 'apk_en': 'remote_access_scam', 'apk_hinglish': 'remote_access_scam', 'pension_en': 'insurance_tax_scam', 'pension_hi': 'insurance_tax_scam', 'job_en': 'job_task_scam', 'job_hinglish': 'job_task_scam', 'invest_en': 'investment_scam', 'invest_hi': 'investment_scam', 'loan_en': 'loan_app_scam', 'loan_hi': 'loan_app_scam', 'anydesk_en': 'remote_access_scam', 'anydesk_hinglish': 'remote_access_scam', 'elec_en': 'utility_disconnection_scam', 'elec_hinglish': 'utility_disconnection_scam', 'sim_hi': 'fake_kyc_update', 'fedex_en': 'courier_customs_scam', 'fedex_hi': 'courier_customs_scam', 'tax_en': 'insurance_tax_scam', 'sextort_en': 'romance_sextortion_scam', 'grandma_en': 'relative_impersonation', 'bank_press1': 'fake_bank_officer', 'irs_en': 'insurance_tax_scam', 'mule_en': 'money_mule_scam'}
+# --- Third pass: shapes found by scoring the independent BothBosu/scam-dialogue corpus (own paraphrases, not its text) ---
+SCAM.update({
+    "refund_bank_ack": "Hello, this is the refund department of an online store. You were overcharged by two hundred dollars and we want to refund it. To process the refund I need your bank account number and routing number.",
+    "support_infected": "Hi, I'm calling from Windows technical support. Your computer has been infected with malware. I will need to remote into your computer to fix it, please download this software.",
+})
+EXPECTED.update({"refund_bank_ack": "fake_refund_scam", "support_infected": "remote_access_scam"})
+SAFE.update({
+    "promo_price_tax": "Hi, I'm calling about the new laptop you ordered. It is five hundred ninety nine dollars plus tax and will arrive by 5 pm today. Please confirm you will be home.",
+    "promo_never_ask": "We are offering a limited time discount on our software. We would never ask you to provide your bank account or social security number over the phone. Call us back whenever you like.",
+})
+
 
 
 @pytest.mark.parametrize("key", sorted(SCAM))
@@ -71,3 +82,4 @@ def test_new_scam_types_detected(key):
 def test_ordinary_calls_not_flagged(key):
     r = classify_transcript(SAFE[key])
     assert r["risk_score"] < 30, r
+
