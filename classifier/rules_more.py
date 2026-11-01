@@ -144,7 +144,7 @@ add_phrases("lottery_scam", "Lottery / prize scam", [
 # ---------------------------------------------------------------------------------------------------------------
 # Request-shape patterns for the new categories (English / Hinglish / Hindi)
 # ---------------------------------------------------------------------------------------------------------------
-CATEGORY_PATTERNS.update({
+_NEW_PATTERNS = {
     "job_task_scam": [
         (r"(?:earn|kamao|kamaye|कमाएं|कमाओ|कमाइए).{0,25}(?:per day|daily|every day|roz|रोज|प्रतिदिन|₹|rs\.? ?\d+|\d+ ?(?:rupees|रुपये|rupay))", 28),
         (r"(?:like|rate|review|subscribe|लाइक|रेट).{0,25}(?:videos?|hotels?|products?|वीडियो|होटल).{0,40}(?:earn|paid|paise|commission|कमा|पैसे|income)", 35),
@@ -196,7 +196,9 @@ CATEGORY_PATTERNS.update({
         (r"(?:credit card|card).{0,30}(?:limit|upgrade|fee waiver|reward|rewards|लिमिट).{0,40}(?:otp|cvv|card number|expiry|कार्ड नंबर|ओटीपी|सीवीवी|verify)", 40),
         (r"(?:last|first)[ -]?(?:four|4|six|6).{0,15}digits?.{0,25}(?:card|debit|credit|कार्ड)", 25),
     ],
-})
+}
+for _cat, _pats in _NEW_PATTERNS.items():  # extend, never replace: the originals are tuned
+    CATEGORY_PATTERNS.setdefault(_cat, []).extend(_pats)
 
 SIGNAL_PATTERNS["credential"] += [
     (r"(?:nine|9|ten|10)[ -]?(?:digit|अंक).{0,15}(?:code|id|कोड|आईडी)", 30),
