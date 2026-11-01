@@ -2,6 +2,7 @@ import re
 from functools import lru_cache
 
 import reasoner
+import rules_more  # noqa: F401  (extends the rule tables from rules.py)
 from rules import CATEGORIES, CATEGORY_PATTERNS, COMBOS, DAMPENER_PATTERNS, DAMPENERS, SIGNAL_PATTERNS, SIGNALS
 
 LOW_RISK = 30   # below this no scam category is reported
